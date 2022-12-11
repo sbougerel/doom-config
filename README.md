@@ -5,7 +5,7 @@
 ### Archlinux
 
 ```bash
-yay -Sy emacs-nativecomp
+yay -Sy emacs-nativecomp fd ripgrep
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
