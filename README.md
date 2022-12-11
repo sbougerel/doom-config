@@ -27,4 +27,12 @@ doom doctor
 
 ### MacOS
 
-TODO
+## LSP dependencies
+
+### Archlinux
+
+Add dependencies for `Rust`, `Python`:
+``` bash
+yay -Sy rust-src pyright
+```
+
