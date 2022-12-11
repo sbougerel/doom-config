@@ -9,6 +9,14 @@ Install Emacs with nativecomp first and dependencies:
 yay -Sy emacs-nativecomp fd ripgrep cmake
 ```
 
+### MacOS
+
+``` bash
+brew install emacs-plus@28 fd ripgrep cmake
+```
+
+### Common steps
+
 Clone config:
 ``` bash
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
@@ -25,8 +33,6 @@ Verify everything looks good:
 doom doctor
 ```
 
-### MacOS
-
 ## LSP dependencies
 
 ### Archlinux
@@ -36,3 +42,9 @@ Add dependencies for `Rust`, `Python`:
 yay -Sy rust-src pyright
 ```
 
+### MacOS
+
+Add dependencies for `Python`, `sh`:
+``` bash
+brew install pyright pipevn shellcheck 
+```
