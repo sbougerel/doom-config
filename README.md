@@ -33,18 +33,59 @@ Verify everything looks good:
 doom doctor
 ```
 
-## LSP dependencies
+## Language dependencies
 
-### Archlinux
+### Org-mode
 
-Add dependencies for `Rust`, `Python`:
+Archlinux
+
 ``` bash
-yay -Sy rust-src pyright
+pacman -Sy texlive-core \
+  texlive-bin \
+  texlive-science \
+  gnuplot \
+  sqlite3
 ```
 
-### MacOS
+### Text, markdown
 
-Add dependencies for `Python`, `sh`:
+Archlinux
+
 ``` bash
-brew install pyright pipevn shellcheck 
+pacman -Sy hunspell hunspell-en_GB
 ```
+
+### Python
+
+Archlinux:
+``` bash
+pacman -Sy pyright python-pip python-pipenv python-black mypy
+```
+
+MacOS:
+``` bash
+brew install pyright pipenv black mypy
+```
+
+### Rust
+
+Archlinux:
+``` bash
+pacman -Sy rustup lldb
+rustup default stable
+```
+
+### shell
+Archlinux:
+``` bash
+pacman -Sy shellcheck
+```
+
+MacOS:
+``` bash
+brew install shellcheck
+```
+
+### Golang
+
+TODO
