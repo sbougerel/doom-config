@@ -40,7 +40,7 @@ doom doctor
 Archlinux
 
 ``` bash
-pacman -Sy texlive-core \
+pacman -S texlive-core \
   texlive-bin \
   texlive-science \
   gnuplot \
@@ -52,14 +52,14 @@ pacman -Sy texlive-core \
 Archlinux
 
 ``` bash
-pacman -Sy hunspell hunspell-en_GB
+pacman -S hunspell hunspell-en_GB
 ```
 
 ### Python
 
 Archlinux:
 ``` bash
-pacman -Sy pyright python-pip python-pipenv python-black mypy
+pacman -S pyright python-pip python-pipenv python-black mypy
 ```
 
 MacOS:
@@ -71,14 +71,15 @@ brew install pyright pipenv black mypy
 
 Archlinux:
 ``` bash
-pacman -Sy rustup lldb
+pacman -S rustup lldb
 rustup default stable
 ```
 
 ### shell
+
 Archlinux:
 ``` bash
-pacman -Sy shellcheck
+pacman -S shellcheck
 ```
 
 MacOS:
@@ -89,3 +90,23 @@ brew install shellcheck
 ### Golang
 
 TODO
+
+### Debugger
+
+Archlinux:
+
+``` bash
+pacman -S gdb lldb nodejs llvm
+# AUR package required next
+yay -S lldb-mi-git
+```
+
+### Profiling
+
+Archlinux:
+
+``` bash
+pacman -S valgrind graphviz
+# Utility to convert callgrind
+pip install gprof2dot
+```
