@@ -6,13 +6,13 @@
 
 Install Emacs with nativecomp first and dependencies:
 
-```bash
+```sh
 yay -Sy emacs-nativecomp fd ripgrep cmake
 ```
 
 ### MacOS
 
-```bash
+```sh
 brew install emacs-plus@28 fd ripgrep cmake
 ```
 
@@ -20,30 +20,56 @@ brew install emacs-plus@28 fd ripgrep cmake
 
 Clone config:
 
-```bash
+```sh
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
 ```
 
 Add `$HOME/.emacs.d/bin` to `$PATH` and finish installation:
 
-```bash
+```sh
 doom install
 ```
 
 Verify everything looks good:
 
-```bash
+```sh
 doom doctor
 ```
 
-## Language dependencies
+Continue below to add required system packages for each functionality.
+
+## Checkers
+
+### Spell
+
+Archlinux:
+
+```sh
+pacman -S aspell \
+  aspell-en \
+  hunspell \
+  hunspell-en_us \
+  hunspell-en_gb
+```
+
+## Tools
+
+### Language Server Protocol
+
+Archlinux:
+
+```sh
+pacman -S npm
+```
+
+## Languages
 
 ### Org-mode
 
-Archlinux
+Archlinux:
 
-```bash
+```sh
 pacman -S texlive-core \
   texlive-bin \
   texlive-science \
@@ -51,25 +77,41 @@ pacman -S texlive-core \
   sqlite3
 ```
 
-### Text, markdown
+### Text
 
-Archlinux
+Archlinux:
 
-```bash
-pacman -S hunspell hunspell-en_GB prettier
+```sh
+pacman -S prettier
+```
+
+### Markdown
+
+Archlinux:
+
+```sh
+pacman -S proselint marked
 ```
 
 ### Python
 
 Archlinux:
 
-```bash
-pacman -S pyright python-pip python-pipenv python-black mypy
+```sh
+pacman -S pyright \
+  python-pip \
+  python-pipenv \
+  python-black \
+  mypy \
+  python-pyflakes \
+  python-isort \
+  python-pytest \
+  python-nose
 ```
 
 MacOS:
 
-```bash
+```sh
 brew install pyright pipenv black mypy
 ```
 
@@ -77,34 +119,48 @@ brew install pyright pipenv black mypy
 
 Archlinux:
 
-```bash
+```sh
 pacman -S rustup lldb
 rustup default stable
+rustup component add rust-analyzer
+mkdir ~/.cargo/bin
+ln  -s `rustup which --toolchain stable rust-analyzer` ~/.cargo/bin/
+export PATH=$HOME/.cargo/bin:$PATH # Also add to init scripts
 ```
 
 ### shell
 
 Archlinux:
 
-```bash
+```sh
 pacman -S shellcheck shfmt
 ```
 
 MacOS:
 
-```bash
+```sh
 brew install shellcheck
+```
+
+### CC
+
+Archlinux:
+
+```sh
+pacman -S glslang
 ```
 
 ### Golang
 
-TODO
+```sh
+# TODO
+```
 
 ### Debugger
 
 Archlinux:
 
-```bash
+```sh
 pacman -S gdb lldb nodejs llvm
 # AUR package required next
 yay -S lldb-mi-git
@@ -114,7 +170,7 @@ yay -S lldb-mi-git
 
 Archlinux:
 
-```bash
+```sh
 pacman -S valgrind graphviz
 # Utility to convert callgrind
 pip install gprof2dot

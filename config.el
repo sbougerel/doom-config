@@ -76,3 +76,6 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(after! spell-fu
+  (setq spell-fu-idle-delay 0.5))  ; default is 0.25
