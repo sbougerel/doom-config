@@ -5,31 +5,35 @@
 ### Archlinux
 
 Install Emacs with nativecomp first and dependencies:
+
 ```bash
 yay -Sy emacs-nativecomp fd ripgrep cmake
 ```
 
 ### MacOS
 
-``` bash
+```bash
 brew install emacs-plus@28 fd ripgrep cmake
 ```
 
 ### Common steps
 
 Clone config:
-``` bash
+
+```bash
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
 ```
 
-Add `$HOME/.emacs.d/bin` to `$PATH` and finish installation: 
-``` bash
+Add `$HOME/.emacs.d/bin` to `$PATH` and finish installation:
+
+```bash
 doom install
 ```
 
 Verify everything looks good:
-``` bash
+
+```bash
 doom doctor
 ```
 
@@ -39,7 +43,7 @@ doom doctor
 
 Archlinux
 
-``` bash
+```bash
 pacman -S texlive-core \
   texlive-bin \
   texlive-science \
@@ -51,26 +55,29 @@ pacman -S texlive-core \
 
 Archlinux
 
-``` bash
-pacman -S hunspell hunspell-en_GB
+```bash
+pacman -S hunspell hunspell-en_GB prettier
 ```
 
 ### Python
 
 Archlinux:
-``` bash
+
+```bash
 pacman -S pyright python-pip python-pipenv python-black mypy
 ```
 
 MacOS:
-``` bash
+
+```bash
 brew install pyright pipenv black mypy
 ```
 
 ### Rust
 
 Archlinux:
-``` bash
+
+```bash
 pacman -S rustup lldb
 rustup default stable
 ```
@@ -78,12 +85,14 @@ rustup default stable
 ### shell
 
 Archlinux:
-``` bash
-pacman -S shellcheck
+
+```bash
+pacman -S shellcheck shfmt
 ```
 
 MacOS:
-``` bash
+
+```bash
 brew install shellcheck
 ```
 
@@ -95,7 +104,7 @@ TODO
 
 Archlinux:
 
-``` bash
+```bash
 pacman -S gdb lldb nodejs llvm
 # AUR package required next
 yay -S lldb-mi-git
@@ -105,7 +114,7 @@ yay -S lldb-mi-git
 
 Archlinux:
 
-``` bash
+```bash
 pacman -S valgrind graphviz
 # Utility to convert callgrind
 pip install gprof2dot
