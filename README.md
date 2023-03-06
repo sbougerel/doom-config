@@ -4,7 +4,7 @@
 
 ### Archlinux
 
-Install Emacs with nativecomp first and dependencies:
+Install Emacs with native compilation first and dependencies:
 
 ```sh
 yay -Sy emacs-nativecomp fd ripgrep cmake
@@ -18,7 +18,7 @@ brew install emacs-plus@28 fd ripgrep cmake
 
 ### Common steps
 
-Clone config:
+Clone configuration:
 
 ```sh
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
