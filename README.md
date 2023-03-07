@@ -53,6 +53,12 @@ pacman -S aspell \
   hunspell-en_gb
 ```
 
+MacOS:
+
+``` sh
+brew install aspell
+```
+
 ## Tools
 
 ### Language Server Protocol

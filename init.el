@@ -81,7 +81,7 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       (spell +aspell +hunspell) ; tasing you for misspelling mispelling
+       (spell +aspell (:if (not IS-MAC) +hunspell)) ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 
        :tools
