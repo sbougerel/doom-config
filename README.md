@@ -77,6 +77,15 @@ pacman -S texlive-core \
   sqlite3
 ```
 
+MacOS:
+
+``` sh
+brew install pngpaste
+brew install graphviz
+brew install gnuplot
+brew install sqlite
+```
+
 ### Text
 
 Archlinux:
@@ -113,6 +122,8 @@ MacOS:
 
 ```sh
 brew install pyright pipenv black mypy
+pip install pytest
+pip install nose
 ```
 
 ### Rust
@@ -128,6 +139,15 @@ ln  -s `rustup which --toolchain stable rust-analyzer` ~/.cargo/bin/
 export PATH=$HOME/.cargo/bin:$PATH # Also add to init scripts
 ```
 
+MacOS:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup component add rust-src
+rustup component add rust-analyzer
+ln -s `rustup which --toolchain stable rust-analyzer` $HOME/.cargo/bin/rust-analyzer
+```
+
 ### shell
 
 Archlinux:
@@ -140,6 +160,7 @@ MacOS:
 
 ```sh
 brew install shellcheck
+brew install shfmt
 ```
 
 ### CC
@@ -150,10 +171,19 @@ Archlinux:
 pacman -S glslang
 ```
 
-### Golang
+MacOS:
 
 ```sh
-# TODO
+brew install glslang
+```
+
+### Golang
+
+MacOS:
+
+```sh
+brew install go
+go install github.com/cweill/gotests/gotests@latest
 ```
 
 ### Debugger
