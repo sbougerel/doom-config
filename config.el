@@ -28,6 +28,8 @@
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
+(setq doom-font (font-spec :family "DejaVuSansMono Nerd Font" :size 22)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 22))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -65,12 +67,16 @@
          ;; Accomodates for the fact that Logseq uses underscores
          :target (file+head "%<%Y_%m_%d>.org"
                             "#+title: %<%Y-%m-%d>\n"))))
-(setq org-log-done 'time)
-(setq org-agenda-files (list org-directory
-                             org-roam-directory
-                             (file-truename (expand-file-name "pages/" org-roam-directory))
-                             (file-truename (expand-file-name "journals/" org-roam-directory))))
 
+(after! org
+  (setq org-log-done 'time))
+
+(after! org-agenda
+  (setq org-agenda-files (list org-directory
+                               org-roam-directory
+                               (file-truename (expand-file-name "pages/" org-roam-directory))
+                               (file-truename (expand-file-name "journals/" org-roam-directory))))
+)
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

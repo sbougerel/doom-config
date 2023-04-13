@@ -2,6 +2,16 @@
 
 Maybe I'll make a PKGBUILD for it one day, who knows.
 
+## Fonts
+
+I've always be fond of the simple elegance of the DejaVu fonts.
+
+Archlinux:
+
+```sh
+pacman -S ttf-dejavu-nerd ttf-dejavu
+```
+
 ## Emacs Installation
 
 ### Archlinux
