@@ -38,12 +38,38 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
 ;; Add repeat mode
 (repeat-mode)
+
+;; Setup to make Org, Org-roam and Org-roam-dailies work together nicely, with
+;; Logseq. Switch most of the workflow to Org-roam, but keep the Org-agenda.
+;;
+;; - Logseq uses the same directory as Org-roam
+;; - Org-agenda searches the Org-roam directory
+;;
+;; My Org-roam notes are version controlled, and the push-pull workflow is being
+;; worked on. The Notes directory should contains all the "graphs" (with the
+;; default one being "roam/").
+(setq org-directory "~/Notes/")
+(setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
+(setq org-roam-dailies-directory "journals/")
+(setq org-roam-capture-templates
+      '(("d" "default" plain
+         "%?"
+         ;; Accomodates for the fact that Logseq uses the "pages" directory
+         :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+         :unnarrowed t)))
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         ;; Accomodates for the fact that Logseq uses underscores
+         :target (file+head "%<%Y_%m_%d>.org"
+                            "#+title: %<%Y-%m-%d>\n"))))
+(setq org-log-done 'time)
+(setq org-agenda-files (list org-directory
+                             org-roam-directory
+                             (file-truename (expand-file-name "pages/" org-roam-directory))
+                             (file-truename (expand-file-name "journals/" org-roam-directory))))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
