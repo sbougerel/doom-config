@@ -1,6 +1,8 @@
 # My Doom Emacs Setup
 
-## Installation
+Maybe I'll make a PKGBUILD for it one day, who knows.
+
+## Emacs Installation
 
 ### Archlinux
 
@@ -55,7 +57,7 @@ pacman -S aspell \
 
 MacOS:
 
-``` sh
+```sh
 brew install aspell
 ```
 
@@ -85,7 +87,7 @@ pacman -S texlive-core \
 
 MacOS:
 
-``` sh
+```sh
 brew install pngpaste
 brew install graphviz
 brew install gnuplot
