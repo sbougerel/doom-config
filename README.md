@@ -4,12 +4,14 @@ Maybe I'll make a PKGBUILD for it one day, who knows.
 
 ## Fonts
 
-I've always be fond of the simple elegance of the DejaVu fonts.
+I like the elegance of both JetBrains and DejaVu monospaced font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures.
+
+For the variable pitch font I use Source Serif Pro which has spacing and height close to (but not exactly matching) JetBrains' fonts.
 
 Archlinux:
 
 ```sh
-pacman -S ttf-dejavu-nerd ttf-dejavu
+pacman -S ttf-jetbrains-mono-nerd adobe-source-serif-fonts
 ```
 
 ## Emacs Installation
