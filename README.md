@@ -14,6 +14,17 @@ Archlinux:
 pacman -S ttf-jetbrains-mono-nerd adobe-source-serif-fonts
 ```
 
+MacOs:
+
+``` sh
+cd `mktemp -d`
+curl -L 'https://fonts.google.com/download?family=Source%20Serif%20Pro' -o 1.zip
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -o 2.zip
+unzip -o 1.zip
+unzip -o 2.zip
+mv *.ttf ~/Library/Fonts/
+```
+
 ## Emacs Installation
 
 ### Archlinux
