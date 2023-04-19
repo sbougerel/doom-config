@@ -55,28 +55,32 @@
 (setq org-directory "~/Notes/")
 (setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
 (setq org-roam-dailies-directory "journals/")
-(setq org-roam-capture-templates
-      '(("d" "default" plain
-         "%?"
-         ;; Accomodates for the fact that Logseq uses the "pages" directory
-         :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
-         :unnarrowed t)))
-(setq org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         "* %?"
-         ;; Accomodates for the fact that Logseq uses underscores
-         :target (file+head "%<%Y_%m_%d>.org"
-                            "#+title: %<%Y-%m-%d>\n"))))
+(after! org-roam
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           ;; Accomodates for the fact that Logseq uses the "pages" directory
+           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t))
+        org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %?"
+           ;; Accomodates for the fact that Logseq uses underscores
+           :target (file+head "%<%Y_%m_%d>.org"
+                              "#+title: %<%Y-%m-%d>\n")))
+        org-roam-file-exclude-regexp
+        (list (expand-file-name  "logseq/" org-roam-directory))))
 
 (after! org
   (setq org-log-done 'time))
 
 (after! org-agenda
-  (setq org-agenda-files (list org-directory
-                               org-roam-directory
-                               (file-truename (expand-file-name "pages/" org-roam-directory))
-                               (file-truename (expand-file-name "journals/" org-roam-directory))))
-)
+  (setq org-agenda-files
+        (list org-directory
+              org-roam-directory
+              (file-truename (expand-file-name "pages/" org-roam-directory))
+              (file-truename (expand-file-name "journals/" org-roam-directory)))))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

@@ -1,10 +1,10 @@
 # My Doom Emacs Setup
 
-Maybe I'll make a PKGBUILD for it one day, who knows.
+I switched to Doom recently, abandoning my old setup, which was becoming more expensive to maintain. I'm loving Doom so far, it lets me focus on the stuff I want to configure, while all the packaging, stability work and testing is done by the community. I don't think I'll switch back, so I might just nuke my old repository out of existence once I have transferred most of it's functionality.
 
 ## Fonts
 
-I like the elegance of both JetBrains and DejaVu monospaced font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures.
+I like the elegance of both JetBrains and DejaVu monospaced font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures, and this font's ligatures work well in Emacs.
 
 For the variable pitch font I use Source Serif Pro which has spacing and height close to (but not exactly matching) JetBrains' fonts.
 
