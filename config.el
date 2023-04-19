@@ -43,46 +43,8 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; Add repeat mode
+;; Add repeat mode which is convenient for navigating through the UI.
 (repeat-mode)
-
-;; Setup to make Org, Org-roam and Org-roam-dailies work together nicely, with
-;; Logseq. Switch most of the workflow to Org-roam, but keep the Org-agenda.
-;;
-;; - Logseq uses the same directory as Org-roam
-;; - Org-agenda searches the Org-roam directory
-;;
-;; My Org-roam notes are version controlled, and the push-pull workflow is being
-;; worked on. The Notes directory should contains all the "graphs" (with the
-;; default one being "roam/").
-(setq org-directory "~/Notes/")
-(setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
-(setq org-roam-dailies-directory "journals/")
-(after! org-roam
-  (setq org-roam-capture-templates
-        '(("d" "default" plain
-           "%?"
-           ;; Accomodates for the fact that Logseq uses the "pages" directory
-           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t))
-        org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %?"
-           ;; Accomodates for the fact that Logseq uses underscores
-           :target (file+head "%<%Y_%m_%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))
-        org-roam-file-exclude-regexp
-        (list (expand-file-name  "logseq/" org-roam-directory))))
-
-(after! org
-  (setq org-log-done 'time))
-
-(after! org-agenda
-  (setq org-agenda-files
-        (list org-directory
-              org-roam-directory
-              (file-truename (expand-file-name "pages/" org-roam-directory))
-              (file-truename (expand-file-name "journals/" org-roam-directory)))))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -116,9 +78,59 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; Org-mode configuration
+;;
+;; Setup to make Org, Org-roam and Org-roam-dailies work together nicely, with
+;; Logseq. Switch most of the workflow to Org-roam, but keep the Org-agenda.
+;;
+;; - Logseq uses the same directory as Org-roam
+;; - Org-agenda searches the Org-roam directory
+;;
+;; My Org-roam notes are version controlled, and the push-pull workflow is being
+;; worked on. The Notes directory should contains all the "graphs" (with the
+;; default one being "roam/").
+(setq org-directory "~/Notes/")
+(setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
+(setq org-roam-dailies-directory "journals/")
+(after! org-roam
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           ;; Accomodates for the fact that Logseq uses the "pages" directory
+           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t))
+        org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %?"
+           ;; Accomodates for the fact that Logseq uses underscores
+           :target (file+head "%<%Y_%m_%d>.org"
+                              "#+title: %<%Y-%m-%d>\n")))
+        org-roam-file-exclude-regexp
+        (list (expand-file-name  "logseq/" org-roam-directory))))
+
+(after! org
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t))
+
+(after! org-agenda
+  (setq org-agenda-files
+        (list org-directory
+              org-roam-directory
+              (file-truename (expand-file-name "pages/" org-roam-directory))
+              (file-truename (expand-file-name "journals/" org-roam-directory)))))
+
+;; Spell and Grammar checking
+;;
+;; Uses aspell for spell checking. Disable proselint for now, it's very noisy,
+;; esp. with org-mode.
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5))  ; default is 0.25
 
+(after! flycheck
+  (setq-default flycheck-disabled-checkers '(proselint)))
+
+;; Assistances for writing
+;;
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)

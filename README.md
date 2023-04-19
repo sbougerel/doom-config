@@ -1,10 +1,10 @@
 # My Doom Emacs Setup
 
-I switched to Doom recently, abandoning my old setup, which was becoming more expensive to maintain. I'm loving Doom so far, it lets me focus on the stuff I want to configure, while all the packaging, stability work and testing is done by the community. I don't think I'll switch back, so I might just nuke my old repository out of existence once I have transferred most of it's functionality.
+I switched to Doom recently, abandoning my old setup, which was becoming more expensive to maintain. I'm loving Doom so far, it lets me focus on the stuff I want to configure, while benefiting from the Doom community resources. Since I don't think I'll switch back, I'll just nuke my old repository out of existence once I have transferred most of its functionality.
 
 ## Fonts
 
-I like the elegance of both JetBrains and DejaVu monospaced font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures, and this font's ligatures work well in Emacs.
+I like the elegance of both JetBrains and DejaVu monospace font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures, and this font's ligatures work well in Emacs.
 
 For the variable pitch font I use Source Serif Pro which has spacing and height close to (but not exactly matching) JetBrains' fonts.
 
@@ -16,7 +16,7 @@ pacman -S ttf-jetbrains-mono-nerd adobe-source-serif-fonts
 
 MacOs:
 
-``` sh
+```sh
 cd `mktemp -d`
 curl -L 'https://fonts.google.com/download?family=Source%20Serif%20Pro' -o 1.zip
 curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -o 2.zip
@@ -76,12 +76,32 @@ pacman -S aspell \
   hunspell \
   hunspell-en_us \
   hunspell-en_gb
+# The following bootstraps the personal English dictionary:
+mkdir -p ~/.emacs.d/.local/etc/ispell
+echo personal_ws-1.1 en 0 > ~/.emacs.d/.local/etc/ispell/.pws
 ```
 
 MacOS:
 
 ```sh
 brew install aspell
+# The following bootstraps the personal English dictionary:
+mkdir -p ~/.emacs.d/.local/etc/ispell
+echo personal_ws-1.1 en 0 > ~/.emacs.d/.local/etc/ispell/.pws
+```
+
+### Grammar
+
+Archlinux:
+
+```sh
+pacman -S languagetool
+```
+
+MacOS:
+
+```sh
+brew install languagetool
 ```
 
 ## Tools
@@ -126,6 +146,8 @@ pacman -S prettier
 ```
 
 ### Markdown
+
+While the `proselint` checker is installed, it's disabled by default and should be manually enabled with `C-u C-c ! x` when necessary.
 
 Archlinux:
 
