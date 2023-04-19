@@ -92,6 +92,7 @@
 (setq org-directory "~/Notes/")
 (setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
 (setq org-roam-dailies-directory "journals/")
+
 (after! org-roam
   (setq org-roam-capture-templates
         '(("d" "default" plain
@@ -129,7 +130,7 @@
 (after! flycheck
   (setq-default flycheck-disabled-checkers '(proselint)))
 
-;; Assistances for writing
+;; Assistants
 ;;
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
@@ -139,3 +140,8 @@
          :map copilot-completion-map
          ("<tab>" . 'copilot-accept-completion)
          ("TAB" . 'copilot-accept-completion)))
+
+(use-package! auto-git-sync
+  :after (magit projectile)
+  :config
+  (add-to-list 'auto-git-sync-dirs org-roam-directory))
