@@ -9,6 +9,9 @@
 (setq user-full-name "Sylvain Bougerel"
       user-mail-address "sylvain.bougerel.devel@gmail.com")
 
+;; Authentication source to store password, API keys, outside of configuration
+(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -141,6 +144,12 @@
          ("<tab>" . 'copilot-accept-completion)
          ("TAB" . 'copilot-accept-completion)))
 
+(use-package! gptel
+  :config
+  (setq! gptel-api-key (auth-source-pick-first-password :host "chat.openai.com")))
+
+;; Versioning and utilities
+;;
 (use-package! auto-git-sync
   :after (magit projectile)
   :config
