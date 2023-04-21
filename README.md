@@ -2,48 +2,23 @@
 
 I switched to Doom recently, abandoning my old setup, which was becoming more expensive to maintain. I'm loving Doom so far, it lets me focus on the stuff I want to configure, while benefiting from the Doom community resources. Since I don't think I'll switch back, I'll just nuke my old repository out of existence once I have transferred most of its functionality.
 
-## Fonts
-
-I like the elegance of both JetBrains and DejaVu monospace font. The DejaVu fonts are slightly more compact, without sacrificing legibility, however JetBrains fonts really shine with the use of ligatures, and this font's ligatures work well in Emacs.
-
-For the variable pitch font I use Source Serif Pro which has spacing and height close to (but not exactly matching) JetBrains' fonts.
-
-Archlinux:
-
-```sh
-pacman -S ttf-jetbrains-mono-nerd adobe-source-serif-fonts
-```
-
-MacOs:
-
-```sh
-cd `mktemp -d`
-curl -L 'https://fonts.google.com/download?family=Source%20Serif%20Pro' -o 1.zip
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -o 2.zip
-unzip -o 1.zip
-unzip -o 2.zip
-mv *.ttf ~/Library/Fonts/
-```
-
 ## Emacs Installation
 
-### Archlinux
+Install Emacs with native compilation and dependencies first.
 
-Install Emacs with native compilation first and dependencies:
+Archlinux:
 
 ```sh
 yay -Sy emacs-nativecomp fd ripgrep cmake
 ```
 
-### MacOS
+MacOS additionally requires GnuPG from `homebrew`, to manage my secrets:
 
 ```sh
-brew install emacs-plus@28 fd ripgrep cmake
+brew install emacs-plus@28 fd ripgrep cmake gnupg
 ```
 
-### Common steps
-
-Clone configuration:
+Common steps across all systems:
 
 ```sh
 git clone https://github.com/sbougerel/doom-config.git ~/.doom.d
@@ -63,6 +38,27 @@ doom doctor
 ```
 
 Continue below to add required system packages for each functionality.
+
+## Fonts Installation
+
+I like the elegance of JetBrains Mono and its ligatures. For the variable pitch font I use Source Serif Pro which has height close to (but not exactly matching) JetBrains' Mono font.
+
+Archlinux:
+
+```sh
+pacman -S ttf-jetbrains-mono-nerd adobe-source-serif-fonts
+```
+
+MacOs:
+
+```sh
+cd `mktemp -d`
+curl -L 'https://fonts.google.com/download?family=Source%20Serif%20Pro' -o 1.zip
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -o 2.zip
+unzip -o 1.zip
+unzip -o 2.zip
+mv *.ttf ~/Library/Fonts/
+```
 
 ## Checkers
 
@@ -116,6 +112,14 @@ pacman -S npm
 
 ## Languages
 
+### Text
+
+Archlinux:
+
+```sh
+pacman -S prettier
+```
+
 ### Org-mode
 
 Archlinux:
@@ -137,17 +141,9 @@ brew install gnuplot
 brew install sqlite
 ```
 
-### Text
-
-Archlinux:
-
-```sh
-pacman -S prettier
-```
-
 ### Markdown
 
-While the `proselint` checker is installed, it's disabled by default and should be manually enabled with `C-u C-c ! x` when necessary.
+Install `proselint` even if I disabled it by default as it's too pedantic. Manually enable it with `C-u C-c ! x` when necessary.
 
 Archlinux:
 

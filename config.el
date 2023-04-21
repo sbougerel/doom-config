@@ -9,9 +9,6 @@
 (setq user-full-name "Sylvain Bougerel"
       user-mail-address "sylvain.bougerel.devel@gmail.com")
 
-;; Authentication source to store password, API keys, outside of configuration
-(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -31,11 +28,18 @@
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
-;;(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size (if IS-MAC 12 22))
-;;      doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size (if IS-MAC 12 22)))
-(set-face-attribute 'default nil :height (if IS-MAC 150 110))
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font")
-      doom-variable-pitch-font (font-spec :family "Source Serif Pro"))
+(setq doom-font-increment 1)
+(if IS-MAC
+    (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
+          doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
+          doom-unicode-font (font-spec :family "JetBrainsMono Nerd Font" :size 14)
+          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14)
+          doom-serif-font (font-spec :family "Source Serif Pro" :size 14))
+  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
+        doom-unicode-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)
+        doom-serif-font (font-spec :family "Source Serif Pro" :size 22)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -93,7 +97,7 @@
 ;; worked on. The Notes directory should contains all the "graphs" (with the
 ;; default one being "roam/").
 (setq org-directory "~/Notes/")
-(setq org-roam-directory (file-truename (expand-file-name "roam/" org-directory)))
+(setq org-roam-directory (file-truename (file-name-concat org-directory "roam/" )))
 (setq org-roam-dailies-directory "journals/")
 
 (after! org-roam
@@ -110,18 +114,18 @@
            :target (file+head "%<%Y_%m_%d>.org"
                               "#+title: %<%Y-%m-%d>\n")))
         org-roam-file-exclude-regexp
-        (list (expand-file-name  "logseq/" org-roam-directory))))
+        (list (file-name-concat org-roam-directory "logseq/"))))
 
 (after! org
   (setq org-log-done 'time)
   (setq org-log-into-drawer t))
 
-(after! org-agenda
-  (setq org-agenda-files
-        (list org-directory
-              org-roam-directory
-              (file-truename (expand-file-name "pages/" org-roam-directory))
-              (file-truename (expand-file-name "journals/" org-roam-directory)))))
+(setq org-agenda-files
+      (append (list org-directory
+                    org-roam-directory)
+              (mapcar (lambda (dir)
+                        (file-truename (file-name-concat org-roam-directory dir)))
+                      '("pages/" "journals/"))))
 
 ;; Spell and Grammar checking
 ;;
@@ -146,7 +150,9 @@
 
 (use-package! gptel
   :config
-  (setq! gptel-api-key (auth-source-pick-first-password :host "chat.openai.com")))
+  (setq! gptel-api-key
+         (lambda () (auth-source-pick-first-password
+                :host "openai.com"))))
 
 ;; Versioning and utilities
 ;;
