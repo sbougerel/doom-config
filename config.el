@@ -3,56 +3,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-(setq user-full-name "Sylvain Bougerel"
-      user-mail-address "sylvain.bougerel.devel@gmail.com")
-
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-unicode-font' -- for unicode glyphs
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
-(setq doom-font-increment 1)
-(if IS-MAC
-    (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
-          doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
-          doom-unicode-font (font-spec :family "JetBrainsMono Nerd Font" :size 14)
-          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14)
-          doom-serif-font (font-spec :family "Source Serif Pro" :size 14))
-  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
-        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
-        doom-unicode-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
-        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)
-        doom-serif-font (font-spec :family "Source Serif Pro" :size 22)))
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
-
-;; Add repeat mode which is convenient for navigating through the UI.
-(repeat-mode)
-
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
@@ -85,8 +35,60 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+(setq user-full-name "Sylvain Bougerel"
+      user-mail-address "sylvain.bougerel.devel@gmail.com")
+
+;; Look & Feel
+;;
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+(setq doom-font-increment 1)
+(if IS-MAC
+    (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
+          doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
+          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14))
+  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
+        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)))
+
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+(setq doom-theme 'doom-one)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type t)
+
+;; Navigation
+;;
+(put 'scroll-left 'disabled t)
+(repeat-mode)
+
 ;; Org-mode configuration
 ;;
+
 ;; Setup to make Org, Org-roam and Org-roam-dailies work together nicely, with
 ;; Logseq. Switch most of the workflow to Org-roam, but keep the Org-agenda.
 ;;
@@ -129,6 +131,7 @@
 
 ;; Spell and Grammar checking
 ;;
+
 ;; Uses aspell for spell checking. Disable proselint for now, it's very noisy,
 ;; esp. with org-mode.
 (after! spell-fu
@@ -139,7 +142,8 @@
 
 ;; Assistants
 ;;
-;; accept completion from copilot and fallback to company
+
+;; Accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
@@ -156,7 +160,9 @@
 
 ;; Versioning and utilities
 ;;
+
 (use-package! auto-git-sync
-  :after (magit projectile)
+  :after (magit)
   :config
-  (add-to-list 'auto-git-sync-dirs org-roam-directory))
+  (setq auto-git-sync-dirs
+        (list (cons org-roam-directory "Update from Wallee"))))
