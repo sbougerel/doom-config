@@ -81,6 +81,12 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; Enable mixed-pitch-mode for Org-mode, Org-roam and Markdown
+(use-package! mixed-pitch
+  :hook ((org-mode . mixed-pitch-mode)
+         (org-roam-mode . mixed-pitch-mode)
+         (markdown-mode . mixed-pitch-mode)))
+
 ;; Navigation
 ;;
 (put 'scroll-left 'disabled t)
