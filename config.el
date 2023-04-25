@@ -103,9 +103,14 @@
 ;; My Org-roam notes are version controlled, and the push-pull workflow is being
 ;; worked on. The Notes directory should contains all the "graphs" (with the
 ;; default one being "roam/").
-(setq org-directory "~/Notes/")
-(setq org-roam-directory (file-truename (file-name-concat org-directory "roam/" )))
-(setq org-roam-dailies-directory "journals/")
+(setq org-directory "~/Notes/"
+      org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
+      org-roam-dailies-directory "journals/"
+      org-agenda-files
+      (append (list org-directory org-roam-directory)
+              (mapcar (lambda (dir)
+                        (file-truename (file-name-concat org-roam-directory dir)))
+                      '("pages/" "journals/"))))
 
 (after! org-roam
   (setq org-roam-capture-templates
@@ -126,13 +131,6 @@
 (after! org
   (setq org-log-done 'time)
   (setq org-log-into-drawer t))
-
-(setq org-agenda-files
-      (append (list org-directory
-                    org-roam-directory)
-              (mapcar (lambda (dir)
-                        (file-truename (file-name-concat org-roam-directory dir)))
-                      '("pages/" "journals/"))))
 
 ;; Spell and Grammar checking
 ;;
