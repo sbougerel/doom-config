@@ -84,7 +84,6 @@
 ;; Enable mixed-pitch-mode for Org-mode, Org-roam and Markdown
 (use-package! mixed-pitch
   :hook ((org-mode . mixed-pitch-mode)
-         (org-roam-mode . mixed-pitch-mode)
          (markdown-mode . mixed-pitch-mode)))
 
 ;; Navigation
