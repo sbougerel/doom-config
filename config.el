@@ -43,6 +43,9 @@
 
 ;; Look & Feel
 ;;
+(setq-default truncate-lines nil)
+(setq-default word-wrap nil)
+(setq-default truncate-partial-width-windows 60)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -164,8 +167,9 @@
 ;; Versioning and utilities
 ;;
 
-(use-package! auto-git-sync
-  :after (magit)
+(use-package! autosync-magit
   :config
-  (setq auto-git-sync-dirs
-        (list (cons org-roam-directory "Update from Wallee"))))
+  (setq autosync-magit-dirs
+        (list (cons (expand-file-name org-roam-directory)
+                    "Update from Wallee")))
+  (global-autosync-magit-mode 1))

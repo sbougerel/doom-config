@@ -45,9 +45,9 @@
            :repo "zerolfx/copilot.el"
            :files ("*.el" "dist")))
 
-(package! auto-git-sync
+(package! autosync-magit
   :recipe (:host github
-           :repo "sbougerel/auto-git-sync"
+           :repo "sbougerel/autosync-magit"
            :files ("*.el")))
 
 (package! gptel)
