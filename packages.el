@@ -45,12 +45,17 @@
            :repo "zerolfx/copilot.el"
            :files ("*.el" "dist")))
 
+(package! gptel)
+
 (package! autosync-magit
   :recipe (:host github
            :repo "sbougerel/autosync-magit"
            :files ("*.el")))
 
-(package! gptel)
+(package! org-roam-logseq
+  :recipe (:host github
+           :repo "sbougerel/org-roam-logseq.el"
+           :files ("*.el")))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
