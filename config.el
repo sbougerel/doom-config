@@ -107,13 +107,16 @@
 ;; worked on. The Notes directory should contains all the "graphs" (with the
 ;; default one being "roam/").
 (setq org-directory "~/Notes/"
+      org-log-done 'time
+      org-log-into-drawer t
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
       org-roam-dailies-directory "journals/"
       org-agenda-files
       (append (list org-directory org-roam-directory)
               (mapcar (lambda (dir)
                         (file-truename (file-name-concat org-roam-directory dir)))
-                      '("pages/" "journals/"))))
+                      '("pages/" "journals/")))
+      org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$")
 
 (after! org-roam
   (setq org-roam-capture-templates
@@ -127,13 +130,7 @@
            "* %?"
            ;; Accomodates for the fact that Logseq uses underscores
            :target (file+head "%<%Y_%m_%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))
-        org-roam-file-exclude-regexp
-        (list (file-name-concat org-roam-directory "logseq/"))))
-
-(after! org
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t))
+                              "#+title: %<%Y-%m-%d>\n")))))
 
 ;; Spell and Grammar checking
 ;;
