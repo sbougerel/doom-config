@@ -70,10 +70,13 @@
 (if IS-MAC
     (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
           doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
-          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14))
+          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14)
+          doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'bold))
   (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
         doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
-        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)))
+        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)
+        ;; 'fixed-pitch-serif' face is generally for emphasis only
+        doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :weight 'bold)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -109,6 +112,7 @@
 (setq org-directory "~/Notes/"
       org-log-done 'time
       org-log-into-drawer t
+      org-hide-emphasis-markers t
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
       org-roam-dailies-directory "journals/"
       org-agenda-files
@@ -118,7 +122,8 @@
                       '("pages/" "journals/")))
       org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$")
 
-(after! org-roam
+(after! org
+  ;; For org and org-roam
   (setq org-roam-capture-templates
         '(("d" "default" plain
            "%?"
@@ -130,7 +135,16 @@
            "* %?"
            ;; Accomodates for the fact that Logseq uses underscores
            :target (file+head "%<%Y_%m_%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))))
+                              "#+title: %<%Y-%m-%d>\n"))))
+  ;; Display the popup buffer below the current window, by slpitting the window
+  ;; NOTE Should this be automated for all ~@pages~ buffers?
+  ;; NOTE Doom Emacs does not seem to allow creation of normal windows
+  (set-popup-rules!
+    `(("\\*org-roam\\*"
+       :actions (display-buffer-below-selected) :size 0.33 :ttl nil :modeline nil :quit nil :slot 1 :select nil)
+      ("^\\*org-roam: "
+       :actions (display-buffer-below-selected) :size 0.33 :ttl nil :modeline nil :quit nil :slot 2 :select nil)))
+  )
 
 ;; Spell and Grammar checking
 ;;
@@ -159,7 +173,7 @@
   :config
   (setq! gptel-api-key
          (lambda () (auth-source-pick-first-password
-                :host "openai.com"))))
+                     :host "openai.com"))))
 
 ;; Versioning and utilities
 ;;
