@@ -78,7 +78,8 @@
 (after! org
   (dolist
       (attr
-       '((org-level-1 1.5 semi-bold)
+       '((org-document-title 1.6 bold)
+         (org-level-1 1.5 semi-bold)
          (org-level-2 1.4 semi-bold)
          (org-level-3 1.3 normal)
          (org-level-4 1.2 normal)
