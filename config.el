@@ -41,11 +41,8 @@
 (setq user-full-name "Sylvain Bougerel"
       user-mail-address "sylvain.bougerel.devel@gmail.com")
 
-;; Look & Feel
+;; Fonts
 ;;
-(setq-default truncate-lines nil)
-(setq-default word-wrap nil)
-(setq-default truncate-partial-width-windows 60)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -70,13 +67,40 @@
 (if IS-MAC
     (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
           doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
-          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 14)
+          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 16)
           doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'bold))
   (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
         doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
-        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 22)
+        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 26)
         ;; 'fixed-pitch-serif' face is generally for emphasis only
         doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :weight 'bold)))
+
+(after! org
+  (dolist
+      (attr
+       '((org-level-1 1.5 semi-bold)
+         (org-level-2 1.4 semi-bold)
+         (org-level-3 1.3 normal)
+         (org-level-4 1.2 normal)
+         (org-level-5 1.1 normal)
+         (org-level-6 1.0 normal)
+         (org-level-7 1.0 normal)
+         (org-level-8 1.0 normal)))
+    (set-face-attribute (nth 0 attr) nil :weight (nth 2 attr) :height (nth 1 attr)))
+  (set-face-attribute 'org-table nil :weight 'normal :height 1.0))
+
+(after! mixed-pitch
+  (setq mixed-pitch-set-height t))
+
+(after! (:and mixed-pitch org)
+  (add-to-list 'mixed-pitch-fixed-pitch-faces 'org-drawer))
+
+;; UI, Look & Feel
+;;
+
+(setq-default truncate-lines nil)
+(setq-default word-wrap nil)
+(setq-default truncate-partial-width-windows 60)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -122,8 +146,7 @@
                       '("pages/" "journals/")))
       org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$")
 
-(after! org
-  ;; For org and org-roam
+(after! org-roam
   (setq org-roam-capture-templates
         '(("d" "default" plain
            "%?"
@@ -135,27 +158,31 @@
            "* %?"
            ;; Accomodates for the fact that Logseq uses underscores
            :target (file+head "%<%Y_%m_%d>.org"
-                              "#+title: %<%Y-%m-%d>\n"))))
+                              "#+title: %<%Y-%m-%d>\n")))))
+
+(after! (:and org-roam popup)
   ;; Display the popup buffer below the current window, by slpitting the window
   ;; NOTE Should this be automated for all ~@pages~ buffers?
   ;; NOTE Doom Emacs does not seem to allow creation of normal windows
   (set-popup-rules!
     `(("\\*org-roam\\*"
-       :actions (display-buffer-below-selected) :size 0.33 :ttl nil :modeline nil :quit nil :slot 1 :select nil)
+       :actions (display-buffer-below-selected)
+       :size 0.33 :ttl nil :modeline nil :quit nil :slot 1 :select nil)
       ("^\\*org-roam: "
-       :actions (display-buffer-below-selected) :size 0.33 :ttl nil :modeline nil :quit nil :slot 2 :select nil)))
-  )
+       :actions (display-buffer-below-selected)
+       :size 0.33 :ttl nil :modeline nil :quit nil :slot 2 :select nil))))
 
 ;; Spell and Grammar checking
 ;;
 
-;; Uses aspell for spell checking. Disable proselint for now, it's very noisy,
-;; esp. with org-mode.
 (after! spell-fu
+  ;; Requires aspell for spell checking.
   (setq spell-fu-idle-delay 0.5))  ; default is 0.25
 
 (after! flycheck
-  (setq-default flycheck-disabled-checkers '(proselint)))
+  (setq-default flycheck-disabled-checkers
+                ;; Disable proselint for now, it's very noisy, esp. with org-mode.
+                '(proselint)))
 
 ;; Assistants
 ;;
