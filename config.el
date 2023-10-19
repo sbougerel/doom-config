@@ -75,7 +75,7 @@
         ;; 'fixed-pitch-serif' face is generally for emphasis only
         doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :weight 'bold)))
 
-(after! org
+(after! org-faces
   (dolist
       (attr
        '((org-document-title 1.6 bold)
@@ -93,7 +93,7 @@
 (after! mixed-pitch
   (setq mixed-pitch-set-height t))
 
-(after! (:and mixed-pitch org)
+(after! (:and mixed-pitch org-faces)
   (add-to-list 'mixed-pitch-fixed-pitch-faces 'org-drawer))
 
 ;; UI, Look & Feel
