@@ -140,6 +140,9 @@
       org-hide-emphasis-markers t
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
       org-roam-dailies-directory "journals/"
+      org-todo-keywords '((sequence "TODO(t)" "STRT(s!)" "HOLD(h!)" "IDEA(i)" "|" "DONE(d!)")
+                          (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))
+      ;; TODO the list below is extremely long and slow, need to build it from an org-roam-db-query instead
       org-agenda-files
       (append (list org-directory org-roam-directory)
               (mapcar (lambda (dir)
