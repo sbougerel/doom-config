@@ -122,7 +122,7 @@
 (put 'scroll-left 'disabled t)
 (repeat-mode)
 
-;; Org-mode configuration
+;; Org-mode and Org-roam configuration
 ;;
 
 ;; Setup to make Org, Org-roam and Org-roam-dailies work together nicely, with
@@ -135,34 +135,41 @@
 ;; worked on. The Notes directory should contains all the "graphs" (with the
 ;; default one being "roam/").
 (setq org-directory "~/Notes/"
-      org-log-done 'time
-      org-log-into-drawer t
-      org-hide-emphasis-markers t
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
-      org-roam-dailies-directory "journals/"
-      org-todo-keywords '((sequence "TODO(t)" "STRT(s!)" "HOLD(h!)" "IDEA(i)" "|" "DONE(d!)")
-                          (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))
-      ;; TODO the list below is extremely long and slow, need to build it from an org-roam-db-query instead
-      org-agenda-files
-      (append (list org-directory org-roam-directory)
-              (mapcar (lambda (dir)
-                        (file-truename (file-name-concat org-roam-directory dir)))
-                      '("pages/" "journals/")))
-      org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$")
+      org-roam-dailies-directory "journals/")
+
+(after! org
+  (setq org-log-done 'time
+        org-log-into-drawer t
+        org-hide-emphasis-markers t
+        org-ellipsis " ▼"
+        ;; Override the default Doom keywords settings
+        org-todo-keywords '((sequence "TODO(t)" "STRT(s!)" "HOLD(h!)" "IDEA(i)" "|" "DONE(d!)")
+                            (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))))
+
+(after! org-agenda
+  ;; TODO the list below is extremely long and slow, need to build it from an org-roam-db-query instead
+  org-agenda-files
+  (append (list org-directory org-roam-directory)
+          (mapcar (lambda (dir)
+                    (file-truename (file-name-concat org-roam-directory dir)))
+                  '("pages/" "journals/"))))
 
 (after! org-roam
-  (setq org-roam-capture-templates
-        '(("d" "default" plain
-           "%?"
-           ;; Accomodates for the fact that Logseq uses the "pages" directory
-           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t))
-        org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %?"
-           ;; Accomodates for the fact that Logseq uses underscores
-           :target (file+head "%<%Y_%m_%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))))
+  (setq
+   org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$"
+   org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      ;; Accomodates for the fact that Logseq uses the "pages" directory
+      :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t))
+   org-roam-dailies-capture-templates
+   '(("d" "default" entry
+      "* %?"
+      ;; Accomodates for the fact that Logseq uses underscores
+      :target (file+head "%<%Y_%m_%d>.org"
+                         "#+title: %<%Y-%m-%d>\n")))))
 
 (after! (:and org-roam popup)
   ;; Display the popup buffer below the current window, by slpitting the window
@@ -175,6 +182,70 @@
       ("^\\*org-roam: "
        :actions (display-buffer-below-selected)
        :size 0.33 :ttl nil :modeline nil :quit nil :slot 2 :select nil))))
+
+(use-package! org-roam-logseq
+  ;; Import Logseq notes into Org-roam
+  :after org-roam)
+
+(map! :leader
+      ;; Overwrite default keybindings of Org from Doom Emacs to match my org-roam habits
+      "n" nil ; Unbind settings from ~modules/config/default/+emacs-bindings.el~
+      (:prefix-map ("n" . "notes")
+       :desc "Search notes for symbol"        "." #'+default/search-notes-for-symbol-at-point
+       :desc "Sync database"                  "-" #'org-roam-db-sync
+       :desc "Find ref"                       "/" #'org-roam-ref-find
+
+       :desc "Org agenda"                     "a" #'org-agenda
+       (:when (modulep! :tools biblio)
+         :desc "Bibliographic notes"          "b"
+         (cond ((modulep! :completion vertico)   #'citar-open-notes)
+               ((modulep! :completion ivy)       #'ivy-bibtex)
+               ((modulep! :completion helm)      #'helm-bibtex)))
+
+       :desc "Toggle last org-clock"          "c" #'+org/toggle-last-clock
+       :desc "Cancel current org-clock"       "C" #'org-clock-cancel
+
+       (:prefix ("d" . "by date")
+        :desc "Goto previous note"            "b" #'org-roam-dailies-goto-previous-note
+        :desc "Goto date"                     "d" #'org-roam-dailies-goto-date
+        :desc "Capture date"                  "D" #'org-roam-dailies-capture-date
+        :desc "Goto next note"                "f" #'org-roam-dailies-goto-next-note
+        :desc "Find directory"                "F" #'org-roam-dailies-find-directory
+        :desc "Goto tomorrow"                 "m" #'org-roam-dailies-goto-tomorrow
+        :desc "Capture tomorrow"              "M" #'org-roam-dailies-capture-tomorrow
+        :desc "Capture today"                 "n" #'org-roam-dailies-capture-today
+        :desc "Goto today"                    "t" #'org-roam-dailies-goto-today
+        :desc "Capture today"                 "T" #'org-roam-dailies-capture-today
+        :desc "Goto yesterday"                "y" #'org-roam-dailies-goto-yesterday
+        :desc "Capture yesterday"             "Y" #'org-roam-dailies-capture-yesterday)
+
+       (:when (modulep! :ui deft)
+         :desc "Open deft"                    "D" #'deft)
+       (:when (modulep! :lang org +noter)
+         :desc "Org noter"                    "e" #'org-noter)
+
+       :desc "Find node"                      "f" #'org-roam-node-find
+       :desc "Browse notes"                   "F" #'+default/browse-notes
+       :desc "Show graph"                     "g" #'org-roam-graph
+       :desc "Insert node"                    "i" #'org-roam-node-insert
+       :desc "Goto today"                     "j" #'org-roam-dailies-goto-today
+       :desc "Capture today"                  "J" #'org-roam-dailies-capture-today
+       :desc "Capture new node"               "n" #'org-roam-capture
+       :desc "Active org-clock"               "o" #'org-clock-goto
+       :desc "Toggle roam buffer"             "r" #'org-roam-buffer-toggle
+       :desc "Dedicated roam buffer"          "R" #'org-roam-buffer-display-dedicated
+       :desc "Search notes"                   "s" #'+default/org-notes-search
+
+       ;; TODO Optimize with proper queries when org is used
+       :desc "Todo list"                      "t" #'org-todo-list
+
+       ;; Terribly slow (based of ~org-agenda~), avoid.
+       ;; :desc "Tags search"                    "m" #'org-tags-view
+       ;; :desc "Search org agenda headlines"    "S" #'+default/org-notes-headlines
+       ;; :desc "View search"                    "v" #'org-search-view
+
+       :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
+       :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text))
 
 ;; Spell and Grammar checking
 ;;
