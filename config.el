@@ -207,9 +207,9 @@
   :after org-roam)
 
 (map! :leader
-      ;; Overwrite default keybindings of Org from Doom Emacs to match my org-roam habits
+      ;; Overwrite default keybindings of Org from Doom Emacs to add Org-roam autoloads
       "n" nil ; Unbind settings from ~modules/config/default/+emacs-bindings.el~
-      (:prefix-map ("n" . "notes")
+      (:prefix ("n" . "notes")
        :desc "Search notes for symbol"        "." #'+default/search-notes-for-symbol-at-point
        :desc "Sync database"                  "-" #'org-roam-db-sync
        :desc "Find ref"                       "/" #'org-roam-ref-find
