@@ -149,11 +149,11 @@
 
 (after! org-agenda
   ;; TODO the list below is extremely long and slow, need to build it from an org-roam-db-query instead
-  org-agenda-files
-  (append (list org-directory org-roam-directory)
-          (mapcar (lambda (dir)
-                    (file-truename (file-name-concat org-roam-directory dir)))
-                  '("pages/" "journals/"))))
+  (setq org-agenda-files
+        (append (list org-directory org-roam-directory)
+                (mapcar (lambda (dir)
+                          (file-truename (file-name-concat org-roam-directory dir)))
+                        '("pages/" "journals/")))))
 
 (after! org-roam
   (setq
