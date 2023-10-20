@@ -144,7 +144,7 @@
         org-hide-emphasis-markers t
         org-ellipsis " ▼"
         ;; Override the default Doom keywords settings
-        org-todo-keywords '((sequence "TODO(t)" "STRT(s!)" "HOLD(h!)" "IDEA(i)" "|" "DONE(d!)")
+        org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")
                             (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))))
 
 (after! org-agenda
