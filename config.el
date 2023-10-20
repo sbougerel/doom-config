@@ -169,7 +169,26 @@
       "* %?"
       ;; Accomodates for the fact that Logseq uses underscores
       :target (file+head "%<%Y_%m_%d>.org"
-                         "#+title: %<%Y-%m-%d>\n")))))
+                         "#+title: %<%Y-%m-%d>\n"))))
+  ;; Merge ~org-roam~ bindings with module ~:lang org~ keybindings in localleader map
+  (map! :map org-mode-map
+        :localleader
+        "D" #'org-roam-demote-entire-buffer
+        "i" #'org-roam-node-insert
+        ;; Unbinds all settings from ~modules/lang/org/contrib/roam2.el~
+        "m" #'org-toggle-item
+        "r" #'org-roam-refile
+        "R" #'org-roam-link-replace-all
+        (:prefix ("o" . "node properties")
+                 "." #'org-set-property
+                 "a" #'org-roam-alias-add
+                 "A" #'org-roam-alias-remove
+                 "q" #'org-set-tags-command
+                 "t" #'org-roam-tag-add
+                 "T" #'org-roam-tag-remove
+                 "r" #'org-roam-ref-add
+                 "R" #'org-roam-ref-remove
+                 )))
 
 (after! (:and org-roam popup)
   ;; Display the popup buffer below the current window, by slpitting the window
