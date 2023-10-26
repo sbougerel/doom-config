@@ -96,12 +96,25 @@
 (after! (:and mixed-pitch org-faces)
   (add-to-list 'mixed-pitch-fixed-pitch-faces 'org-drawer))
 
-;; UI, Look & Feel
+;; Editing
 ;;
 
-(setq-default truncate-lines nil)
-(setq-default word-wrap nil)
-(setq-default truncate-partial-width-windows 60)
+(after! doom-editor
+  ;; Doom thinks this is expensive, but I can't leave with having to scroll
+  ;; horizontally due to me displaying multiple vertical windows. Wrapping lines
+  ;; lifts this inconvenience.
+  (setq-default truncate-lines nil)
+  ;; Given the above, I got used to wrapping at any point in the line.
+  (setq-default word-wrap nil)
+  ;; Given that I regularly dispay 3 to 4 vertical buffers, I find 60 is good
+  ;; limit.
+  (setq-default truncate-partial-width-windows 60))
+
+(after! (:and elisp-mode doom-editor)
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq sentence-end-double-space t))))
+
+;; UI, Look & Feel
+;;
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -268,7 +281,7 @@
        :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
        :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text))
 
-;; Spell and Grammar checking
+;; Assistants
 ;;
 
 (after! spell-fu
@@ -279,9 +292,6 @@
   (setq-default flycheck-disabled-checkers
                 ;; Disable proselint for now, it's very noisy, esp. with org-mode.
                 '(proselint)))
-
-;; Assistants
-;;
 
 ;; Accept completion from copilot and fallback to company
 (use-package! copilot
