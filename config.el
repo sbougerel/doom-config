@@ -142,6 +142,8 @@
   (setq org-log-done 'time
         org-log-into-drawer t
         org-hide-emphasis-markers t
+        org-startup-with-inline-images t
+        org-startup-with-latex-preview t
         org-ellipsis " ▼"
         ;; Override the default Doom keywords settings
         org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")

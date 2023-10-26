@@ -128,6 +128,7 @@ Archlinux:
 pacman -S texlive-core \
   texlive-bin \
   texlive-science \
+  textlive-plaingeneric \
   gnuplot \
   sqlite3
 ```
