@@ -301,9 +301,4 @@
 ;; Versioning and utilities
 ;;
 
-(use-package! autosync-magit
-  :config
-  (setq autosync-magit-dirs
-        (list (cons (expand-file-name org-roam-directory)
-                    "Update from Wallee")))
-  (global-autosync-magit-mode 1))
+(use-package! autosync-magit)
