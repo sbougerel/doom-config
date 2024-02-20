@@ -156,7 +156,6 @@
         org-log-into-drawer t
         org-hide-emphasis-markers t
         org-startup-with-inline-images t
-        org-startup-with-latex-preview t
         org-ellipsis " ▼"
         ;; Override the default Doom keywords settings
         org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")
@@ -182,9 +181,11 @@
    org-roam-dailies-capture-templates
    '(("d" "default" entry
       "* %?"
-      ;; Accomodates for the fact that Logseq uses underscores
-      :target (file+head "%<%Y_%m_%d>.org"
-                         "#+title: %<%Y-%m-%d>\n"))))
+      :target (file+head "%<%Y-%m-%d>.org"
+                         "#+title: %<%Y-%m-%d>\n")))
+   org-roam-mode-sections '(org-roam-backlinks-section
+                            org-roam-reflinks-section
+                            org-roam-unlinked-references-section))
   ;; Merge ~org-roam~ bindings with module ~:lang org~ keybindings in localleader map
   (map! :map org-mode-map
         :localleader
@@ -216,10 +217,6 @@
       ("^\\*org-roam: "
        :actions (display-buffer-below-selected)
        :size 0.33 :ttl nil :modeline nil :quit nil :slot 2 :select nil))))
-
-(use-package! org-roam-logseq
-  ;; Import Logseq notes into Org-roam
-  :after org-roam)
 
 (map! :leader
       ;; Overwrite default keybindings of Org from Doom Emacs to add Org-roam autoloads
@@ -311,4 +308,17 @@
 ;; Versioning and utilities
 ;;
 
-(use-package! autosync-magit)
+(use-package! autosync-magit
+  :config
+  (add-hook 'autosync-magit-after-merge-hook #'logseq-org-roam))
+
+(use-package! logseq-org-roam
+  :config
+  (add-hook 'logseq-org-roam-updated-hook #'org-roam-db-sync))
+
+
+;; Major modes settings
+;;
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))

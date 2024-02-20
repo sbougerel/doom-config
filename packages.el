@@ -52,9 +52,9 @@
            :repo "sbougerel/autosync-magit"
            :files ("*.el")))
 
-(package! org-roam-logseq
+(package! logseq-org-roam
   :recipe (:host github
-           :repo "sbougerel/org-roam-logseq.el"
+           :repo "sbougerel/logseq-org-roam"
            :files ("*.el")))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to

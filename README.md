@@ -165,7 +165,8 @@ pacman -S pyright \
   python-pyflakes \
   python-isort \
   python-pytest \
-  python-nose
+  python-nose \
+  python-debuggpy
 ```
 
 MacOS:
@@ -174,6 +175,7 @@ MacOS:
 brew install pyright pipenv black mypy
 pip install pytest
 pip install nose
+pip install debugpy
 ```
 
 ### Rust
