@@ -149,6 +149,7 @@
 ;; default one being "roam/").
 (setq org-directory "~/Notes/"
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
+      org-attach-id-dir (expand-file-name "assets" org-roam-directory)
       org-roam-dailies-directory "journals/")
 
 (after! org
