@@ -159,7 +159,7 @@
         org-startup-with-inline-images t
         org-ellipsis " ▼"
         ;; Override the default Doom keywords settings
-        org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")
+        org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "DOING(n!)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")
                             (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))))
 
 (after! org-agenda
@@ -309,9 +309,7 @@
 ;; Versioning and utilities
 ;;
 
-(use-package! autosync-magit
-  :config
-  (add-hook 'autosync-magit-after-merge-hook #'logseq-org-roam))
+(use-package! autosync-magit)
 
 (use-package! logseq-org-roam
   :config
