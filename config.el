@@ -123,17 +123,30 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; Enable mixed-pitch-mode for Org-mode, Org-roam and Markdown
 (use-package! mixed-pitch
   :hook ((org-mode . mixed-pitch-mode)
          (markdown-mode . mixed-pitch-mode)))
 
+(after! emojify
+  ;; SLOW! Only enable when needed, e.g. text modes
+  (mapc (lambda (m)
+          (add-to-list 'emojify-inhibit-major-modes m))
+        '(rust-mode json-mode tsx-ts-mode)
+        ))
+
 ;; Navigation
 ;;
 (put 'scroll-left 'disabled t)
 (repeat-mode)
+
+(map! "M-p" #'backward-paragraph
+      "M-n" #'forward-paragraph
+      "C-S-y" (cmd!
+               (beginning-of-line)
+               (yank)))
 
 ;; Org-mode and Org-roam configuration
 ;;
