@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Morgane feedings
+# uuid:
+# key: morgsfeed
+# condition: t
+# --
+Morgane feeding
+:PROPERTIES:
+:time: `(format-time-string "%H:%M")`
+:ml-brest-milk:
+:ml-formula:
+:spoons-solid:
+:poo:
+:vomit:
+:tags: morgane-feedings
+:END:
