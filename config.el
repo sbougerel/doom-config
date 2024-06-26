@@ -113,6 +113,19 @@
 (after! (:and elisp-mode doom-editor)
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq sentence-end-double-space t))))
 
+(use-package! hideshow
+  :hook (prog-mode . hs-minor-mode)
+  )
+
+(after! hideshow
+  (map! :leader
+        (:prefix ("h" . "hide/show")
+         :desc "Toggle hidding block"     "h" #'hs-toggle-hiding
+         :desc "Hide all blocks"          "a" #'hs-hide-all
+         :desc "Show all blocks"          "A" #'hs-show-all
+         :desc "Hide blocks below"        "l" #'hs-hide-level
+         )))
+
 ;; UI, Look & Feel
 ;;
 
@@ -131,10 +144,10 @@
          (markdown-mode . mixed-pitch-mode)))
 
 (after! emojify
-  ;; SLOW! Only enable when needed, e.g. text modes
+  ;; Enable only when needed, e.g. text modes
   (mapc (lambda (m)
           (add-to-list 'emojify-inhibit-major-modes m))
-        '(rust-mode json-mode tsx-ts-mode)
+        '(rust-mode json-mode typescript-mode prog-mode)
         ))
 
 ;; Navigation
