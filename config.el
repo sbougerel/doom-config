@@ -64,7 +64,7 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 (setq doom-font-increment 1)
-(if IS-MAC
+(if (featurep :system 'macos)
     (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
           doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
           doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 16)
@@ -96,8 +96,19 @@
 (after! (:and mixed-pitch org-faces)
   (add-to-list 'mixed-pitch-fixed-pitch-faces 'org-drawer))
 
+(map! (:leader
+       (:desc "Increase font" "+" #'doom/increase-font-size
+        :desc "Decrease font" "-" #'doom/decrease-font-size
+        )))
+
 ;; Editing
 ;;
+(use-package! treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (after! doom-editor
   ;; Doom thinks this is expensive, but I can't leave with having to scroll
