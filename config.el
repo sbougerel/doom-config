@@ -96,10 +96,14 @@
 (after! (:and mixed-pitch org-faces)
   (add-to-list 'mixed-pitch-fixed-pitch-faces 'org-drawer))
 
+(defvar-keymap doom-font-size-repeat-map
+  :doc "Keymap to repeat doom font-size sequences. Used in `repeat-mode'."
+  :repeat t
+  "+" #'doom/increase-font-size
+  "-" #'doom/decrease-font-size)
 (map! (:leader
        (:desc "Increase font" "+" #'doom/increase-font-size
-        :desc "Decrease font" "-" #'doom/decrease-font-size
-        )))
+        :desc "Decrease font" "-" #'doom/decrease-font-size)))
 
 ;; Editing
 ;;
