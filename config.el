@@ -107,12 +107,16 @@
 
 ;; Editing
 ;;
+
+;; This is temporary, until Emacs ships with treesitter's grammars
 (use-package! treesit-auto
   :custom
-  (treesit-auto-install 'prompt)
+  (treesit-auto-install t)
   :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+  (setq treesit-auto-langs '(html javascript json python rust tsx typescript))
+  ;; This could take a long time at installation, so use manually.
+  ;;(treesit-auto-install-all)
+  (treesit-auto-add-to-auto-mode-alist 'all))
 
 (after! doom-editor
   ;; Doom thinks this is expensive, but I can't leave with having to scroll
