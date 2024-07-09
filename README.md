@@ -9,7 +9,7 @@ Install Emacs with native compilation and dependencies first.
 Archlinux:
 
 ```sh
-yay -Sy emacs-nativecomp fd ripgrep cmake
+yay -Sy emacs-nativecomp fd ripgrep cmake unzip
 ```
 
 MacOS additionally requires GnuPG from `homebrew`, to manage my secrets:
@@ -58,6 +58,14 @@ curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrai
 unzip -o 1.zip
 unzip -o 2.zip
 mv *.ttf ~/Library/Fonts/
+```
+
+## Syntax parsing
+
+As of Emacs 29, tree-sitter is becoming more widely adopted, however it relies on user actions for now. My setup is a deterministic approach rather than a lazy-loading approach, which leaves less room for surprises and slow downs. Execute the following post installation to fetch parsers:
+
+``` emacs-lisp
+(treesit-auto-install-all)
 ```
 
 ## Checkers
