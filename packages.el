@@ -40,12 +40,17 @@
 ;; Use `:pin' to specify a particular commit to install.
 ;(package! builtin-package :pin "1a2b3c4d5e")
 
-(package! copilot
-  :recipe (:host github
-           :repo "zerolfx/copilot.el"
-           :files ("*.el" "dist")))
+;; (package! copilot
+;;   :recipe (:host github
+;;            :repo "zerolfx/copilot.el"
+;;            :files ("*.el" "dist")))
 
-(package! gptel)
+;; (package! gptel)
+
+;; (package! codium
+;;   :recipe (:host github
+;;            :repo "Exafunction/codeium.el"
+;;            :files ("*.el")))
 
 (package! autosync-magit
   :recipe (:host github

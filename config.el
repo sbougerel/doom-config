@@ -110,13 +110,22 @@
 
 ;; This is temporary, until Emacs ships with treesitter's grammars
 (use-package! treesit-auto
-  :custom
-  (treesit-auto-install t)
   :config
-  (setq treesit-auto-langs '(html javascript json python rust tsx typescript))
+  (setq treesit-auto-langs '(tsx typescript json))
   ;; This could take a long time at installation, so use manually.
   ;;(treesit-auto-install-all)
   (treesit-auto-add-to-auto-mode-alist 'all))
+
+(after! typescript-ts-mode
+  (add-hook! 'typescript-ts-base-mode-hook
+             #'doom--enable-+javascript-npm-mode-in-typescript-mode-h
+             #'npm-mode
+             #'rainbow-delimiters-mode)
+  (add-hook! 'typescript-ts-mode-hook #'tide-setup)
+  (add-hook! 'tsx-ts-mode-hook #'tide-setup))
+
+(after! json-ts-mode
+  (add-hook! 'json-mode-hook #'doom--enable-+javascript-npm-mode-in-json-mode-h))
 
 (after! doom-editor
   ;; Doom thinks this is expensive, but I can't leave with having to scroll
@@ -351,9 +360,54 @@
 ;;          (lambda () (auth-source-pick-first-password
 ;;                      :host "openai.com"))))
 
+;; (use-package! codium
+;;   :init
+;;   ;; use globally
+;;   (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+
+;;   :defer t ;; lazy loading, if you want
+;;   :config
+;;   (setq
+;;    codeium/metadata/api_key
+;;    (funcall (plist-get
+;;              (nth 0 (auth-source-search :host "codeium.com"))
+;;              :secret)))
+
+;;   ;; do not use popup boxes
+;;   (setq use-dialog-box nil)
+
+;;   ;; get codeium status in the modeline
+;;   ;; (setq codeium-mode-line-enable
+;;   ;;     (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;   ;; (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+;;   ;; alternatively for a more extensive mode-line
+;;   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+;;   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+;;   (setq codeium-api-enabled
+;;         (lambda (api)
+;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+
+;;   ;; you can also set a config for a single buffer like this:
+;;   ;; (add-hook 'python-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+;;   ;; You can overwrite all the codeium configs!
+;;   ;; for example, we recommend limiting the string sent to codeium for better performance
+;;   (defun my-codeium/document/text ()
+;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+
+;;   ;; if you change the text, you should also change the cursor_offset
+;;   ;; warning: this is measured by UTF-8 encoded bytes
+;;   (defun my-codeium/document/cursor_offset ()
+;;     (codeium-utf8-byte-length
+;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;   (setq codeium/document/text 'my-codeium/document/text)
+;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+
 ;; Versioning and utilities
 ;;
-
 (use-package! autosync-magit)
 
 (use-package! logseq-org-roam
