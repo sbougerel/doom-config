@@ -183,9 +183,7 @@
 (put 'scroll-left 'disabled t)
 (repeat-mode)
 
-(map! "M-p" #'backward-paragraph
-      "M-n" #'forward-paragraph
-      "C-S-y" (cmd!
+(map! "C-S-y" (cmd!
                (beginning-of-line)
                (yank)))
 
