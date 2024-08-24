@@ -202,6 +202,7 @@
 (setq org-directory "~/Notes/"
       org-roam-directory (file-truename (file-name-concat org-directory "roam/"))
       org-attach-id-dir (expand-file-name "assets" org-roam-directory)
+      org-attach-auto-tag nil
       org-roam-dailies-directory "journals/")
 
 (after! org
@@ -230,6 +231,12 @@
       "%?"
       ;; Accomodates for the fact that Logseq uses the "pages" directory
       :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("b" "blog" plain
+      "%?"
+      ;; Accomodates for the fact that Logseq uses the "pages" directory
+      :target (file+head "pages/${slug}.org"
+                         "#+title: ${title}\n#+filetags: :blog:\n* ${title} :@blog:\n:PROPERTIES:\n:EXPORT_FILE_NAME: ${slug}\n:END:\n")
       :unnarrowed t))
    org-roam-dailies-capture-templates
    '(("d" "default" entry
