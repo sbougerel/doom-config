@@ -108,6 +108,18 @@
 ;; Editing
 ;;
 
+(after! eglot
+  (advice-add 'eglot--signal-textDocument/didOpen :override
+              (lambda ()
+                "Send textDocument/didOpen to server."
+                (el-patch-add (eglot--track-changes-fetch eglot--track-changes))
+                (setq eglot--recent-changes nil
+                      eglot--versioned-identifier 0
+                      eglot--TextDocumentIdentifier-cache nil)
+                (jsonrpc-notify
+                 (eglot--current-server-or-lose)
+                 :textDocument/didOpen `(:textDocument ,(eglot--TextDocumentItem))))))
+
 ;; This is temporary, until Emacs ships with treesitter's grammars
 (use-package! treesit-auto
   :config
@@ -118,11 +130,84 @@
 
 (after! typescript-ts-mode
   (add-hook! 'typescript-ts-base-mode-hook
-             #'doom--enable-+javascript-npm-mode-in-typescript-mode-h
              #'npm-mode
              #'rainbow-delimiters-mode)
-  (add-hook! 'typescript-ts-mode-hook #'tide-setup)
-  (add-hook! 'tsx-ts-mode-hook #'tide-setup))
+  (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
+  (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
+  ;; Function below is an extract from Emacs30.0.50 source:
+  (defun c-ts-common-comment-indent-new-line (&optional soft)
+    "Break line at point and indent, continuing comment if within one.
+
+This is like `comment-indent-new-line', but specialized for C-style //
+and /* */ comments.  SOFT works the same as in
+`comment-indent-new-line'."
+    ;; I want to experiment with explicitly listing out all each cases and
+    ;; handle them separately, as opposed to fiddling with `comment-start'
+    ;; and friends.  This will have more duplicate code and will be less
+    ;; generic, but in the same time might save us from writing cryptic
+    ;; code to handle all sorts of edge cases.
+    ;;
+    ;; For this command, let's try to make it basic: if the current line
+    ;; is a // comment, insert a newline and a // prefix; if the current
+    ;; line is in a /* comment, insert a newline and a * prefix.  No
+    ;; auto-fill or other smart features.
+    (let ((insert-line-break
+           (lambda ()
+	     (delete-horizontal-space)
+	     (if soft
+	         (insert-and-inherit ?\n)
+	       (newline  1)))))
+      (cond
+       ;; Line starts with //, or ///, or ////...
+       ;; Or //! (used in rust).
+       ((save-excursion
+          (beginning-of-line)
+          (re-search-forward
+           (rx "//" (group (* (any "/!")) (* " ")))
+           (line-end-position)
+           t nil))
+        (let ((offset (- (match-beginning 0) (line-beginning-position)))
+              (whitespaces (match-string 1)))
+          (funcall insert-line-break)
+          (delete-region (line-beginning-position) (point))
+          (insert (make-string offset ?\s) "//" whitespaces)))
+
+       ;; Line starts with /* or /**.
+       ((save-excursion
+          (beginning-of-line)
+          (re-search-forward
+           (rx "/*" (group (? "*") (* " ")))
+           (line-end-position)
+           t nil))
+        (let ((offset (- (match-beginning 0) (line-beginning-position)))
+              (whitespace-and-star-len (length (match-string 1))))
+          (funcall insert-line-break)
+          (delete-region (line-beginning-position) (point))
+          (insert
+           (make-string offset ?\s)
+           " *"
+           (make-string whitespace-and-star-len ?\s))))
+
+       ;; Line starts with *.
+       ((save-excursion
+          (beginning-of-line)
+          (looking-at (rx (group (* " ") (any "*|") (* " ")))))
+        (let ((prefix (match-string 1)))
+          (funcall insert-line-break)
+          (delete-region (line-beginning-position) (point))
+          (insert prefix)))
+
+       ;; Line starts with whitespaces or no space.  This is basically the
+       ;; default case since (rx (* " ")) matches anything.
+       ((save-excursion
+          (beginning-of-line)
+          (looking-at (rx (* " "))))
+        (let ((whitespaces (match-string 0)))
+          (funcall insert-line-break)
+          (delete-region (line-beginning-position) (point))
+          (insert whitespaces))))))
+  (setq-local comment-line-break-function
+              #'c-ts-common-comment-indent-new-line))
 
 (after! json-ts-mode
   (add-hook! 'json-mode-hook #'doom--enable-+javascript-npm-mode-in-json-mode-h))
