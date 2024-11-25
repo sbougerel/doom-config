@@ -112,7 +112,7 @@
   (advice-add 'eglot--signal-textDocument/didOpen :override
               (lambda ()
                 "Send textDocument/didOpen to server."
-                (el-patch-add (eglot--track-changes-fetch eglot--track-changes))
+                (eglot--track-changes-fetch eglot--track-changes)
                 (setq eglot--recent-changes nil
                       eglot--versioned-identifier 0
                       eglot--TextDocumentIdentifier-cache nil)
@@ -131,83 +131,85 @@
 (after! typescript-ts-mode
   (add-hook! 'typescript-ts-base-mode-hook
              #'npm-mode
-             #'rainbow-delimiters-mode)
-  (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
-  (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
-  ;; Function below is an extract from Emacs30.0.50 source:
-  (defun c-ts-common-comment-indent-new-line (&optional soft)
-    "Break line at point and indent, continuing comment if within one.
+             #'rainbow-delimiters-mode
+             (lambda ()
+               ;; Function below is an extract from Emacs30.0.50 source:
+               (defun c-ts-common-comment-indent-new-line (&optional soft)
+                 "Break line at point and indent, continuing comment if within one.
 
 This is like `comment-indent-new-line', but specialized for C-style //
 and /* */ comments.  SOFT works the same as in
 `comment-indent-new-line'."
-    ;; I want to experiment with explicitly listing out all each cases and
-    ;; handle them separately, as opposed to fiddling with `comment-start'
-    ;; and friends.  This will have more duplicate code and will be less
-    ;; generic, but in the same time might save us from writing cryptic
-    ;; code to handle all sorts of edge cases.
-    ;;
-    ;; For this command, let's try to make it basic: if the current line
-    ;; is a // comment, insert a newline and a // prefix; if the current
-    ;; line is in a /* comment, insert a newline and a * prefix.  No
-    ;; auto-fill or other smart features.
-    (let ((insert-line-break
-           (lambda ()
-	     (delete-horizontal-space)
-	     (if soft
-	         (insert-and-inherit ?\n)
-	       (newline  1)))))
-      (cond
-       ;; Line starts with //, or ///, or ////...
-       ;; Or //! (used in rust).
-       ((save-excursion
-          (beginning-of-line)
-          (re-search-forward
-           (rx "//" (group (* (any "/!")) (* " ")))
-           (line-end-position)
-           t nil))
-        (let ((offset (- (match-beginning 0) (line-beginning-position)))
-              (whitespaces (match-string 1)))
-          (funcall insert-line-break)
-          (delete-region (line-beginning-position) (point))
-          (insert (make-string offset ?\s) "//" whitespaces)))
+                 ;; I want to experiment with explicitly listing out all each cases and
+                 ;; handle them separately, as opposed to fiddling with `comment-start'
+                 ;; and friends.  This will have more duplicate code and will be less
+                 ;; generic, but in the same time might save us from writing cryptic
+                 ;; code to handle all sorts of edge cases.
+                 ;;
+                 ;; For this command, let's try to make it basic: if the current line
+                 ;; is a // comment, insert a newline and a // prefix; if the current
+                 ;; line is in a /* comment, insert a newline and a * prefix.  No
+                 ;; auto-fill or other smart features.
+                 (let ((insert-line-break
+                        (lambda ()
+	                  (delete-horizontal-space)
+	                  (if soft
+	                      (insert-and-inherit ?\n)
+	                    (newline  1)))))
+                   (cond
+                    ;; Line starts with //, or ///, or ////...
+                    ;; Or //! (used in rust).
+                    ((save-excursion
+                       (beginning-of-line)
+                       (re-search-forward
+                        (rx "//" (group (* (any "/!")) (* " ")))
+                        (line-end-position)
+                        t nil))
+                     (let ((offset (- (match-beginning 0) (line-beginning-position)))
+                           (whitespaces (match-string 1)))
+                       (funcall insert-line-break)
+                       (delete-region (line-beginning-position) (point))
+                       (insert (make-string offset ?\s) "//" whitespaces)))
 
-       ;; Line starts with /* or /**.
-       ((save-excursion
-          (beginning-of-line)
-          (re-search-forward
-           (rx "/*" (group (? "*") (* " ")))
-           (line-end-position)
-           t nil))
-        (let ((offset (- (match-beginning 0) (line-beginning-position)))
-              (whitespace-and-star-len (length (match-string 1))))
-          (funcall insert-line-break)
-          (delete-region (line-beginning-position) (point))
-          (insert
-           (make-string offset ?\s)
-           " *"
-           (make-string whitespace-and-star-len ?\s))))
+                    ;; Line starts with /* or /**.
+                    ((save-excursion
+                       (beginning-of-line)
+                       (re-search-forward
+                        (rx "/*" (group (? "*") (* " ")))
+                        (line-end-position)
+                        t nil))
+                     (let ((offset (- (match-beginning 0) (line-beginning-position)))
+                           (whitespace-and-star-len (length (match-string 1))))
+                       (funcall insert-line-break)
+                       (delete-region (line-beginning-position) (point))
+                       (insert
+                        (make-string offset ?\s)
+                        " *"
+                        (make-string whitespace-and-star-len ?\s))))
 
-       ;; Line starts with *.
-       ((save-excursion
-          (beginning-of-line)
-          (looking-at (rx (group (* " ") (any "*|") (* " ")))))
-        (let ((prefix (match-string 1)))
-          (funcall insert-line-break)
-          (delete-region (line-beginning-position) (point))
-          (insert prefix)))
+                    ;; Line starts with *.
+                    ((save-excursion
+                       (beginning-of-line)
+                       (looking-at (rx (group (* " ") (any "*|") (* " ")))))
+                     (let ((prefix (match-string 1)))
+                       (funcall insert-line-break)
+                       (delete-region (line-beginning-position) (point))
+                       (insert prefix)))
 
-       ;; Line starts with whitespaces or no space.  This is basically the
-       ;; default case since (rx (* " ")) matches anything.
-       ((save-excursion
-          (beginning-of-line)
-          (looking-at (rx (* " "))))
-        (let ((whitespaces (match-string 0)))
-          (funcall insert-line-break)
-          (delete-region (line-beginning-position) (point))
-          (insert whitespaces))))))
-  (setq-local comment-line-break-function
-              #'c-ts-common-comment-indent-new-line))
+                    ;; Line starts with whitespaces or no space.  This is basically the
+                    ;; default case since (rx (* " ")) matches anything.
+                    ((save-excursion
+                       (beginning-of-line)
+                       (looking-at (rx (* " "))))
+                     (let ((whitespaces (match-string 0)))
+                       (funcall insert-line-break)
+                       (delete-region (line-beginning-position) (point))
+                       (insert whitespaces))))))
+               (setq-local comment-line-break-function
+                           #'c-ts-common-comment-indent-new-line)))
+  (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
+  (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
+  )
 
 (after! json-ts-mode
   (add-hook! 'json-mode-hook #'doom--enable-+javascript-npm-mode-in-json-mode-h))
@@ -434,67 +436,6 @@ and /* */ comments.  SOFT works the same as in
   (setq-default flycheck-disabled-checkers
                 ;; Disable proselint for now, it's very noisy, esp. with org-mode.
                 '(proselint)))
-
-;; Accept completion from copilot and fallback to company
-;; (use-package! copilot
-;;   :hook (prog-mode . copilot-mode)
-;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-;;          ("C-<tab>" . 'copilot-accept-completion-by-word)
-;;          :map copilot-completion-map
-;;          ("<tab>" . 'copilot-accept-completion)
-;;          ("TAB" . 'copilot-accept-completion)))
-
-;; (use-package! gptel
-;;   :config
-;;   (setq! gptel-api-key
-;;          (lambda () (auth-source-pick-first-password
-;;                      :host "openai.com"))))
-
-;; (use-package! codium
-;;   :init
-;;   ;; use globally
-;;   (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-
-;;   :defer t ;; lazy loading, if you want
-;;   :config
-;;   (setq
-;;    codeium/metadata/api_key
-;;    (funcall (plist-get
-;;              (nth 0 (auth-source-search :host "codeium.com"))
-;;              :secret)))
-
-;;   ;; do not use popup boxes
-;;   (setq use-dialog-box nil)
-
-;;   ;; get codeium status in the modeline
-;;   ;; (setq codeium-mode-line-enable
-;;   ;;     (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-;;   ;; (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-;;   ;; alternatively for a more extensive mode-line
-;;   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
-
-;;   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-;;   (setq codeium-api-enabled
-;;         (lambda (api)
-;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-
-;;   ;; you can also set a config for a single buffer like this:
-;;   ;; (add-hook 'python-mode-hook
-;;   ;;     (lambda ()
-;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
-
-;;   ;; You can overwrite all the codeium configs!
-;;   ;; for example, we recommend limiting the string sent to codeium for better performance
-;;   (defun my-codeium/document/text ()
-;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-
-;;   ;; if you change the text, you should also change the cursor_offset
-;;   ;; warning: this is measured by UTF-8 encoded bytes
-;;   (defun my-codeium/document/cursor_offset ()
-;;     (codeium-utf8-byte-length
-;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-;;   (setq codeium/document/text 'my-codeium/document/text)
-;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
 
 ;; Versioning and utilities
 ;;
