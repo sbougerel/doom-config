@@ -339,6 +339,12 @@
                 ;; Disable proselint for now, it's very noisy, esp. with org-mode.
                 '(proselint)))
 
+(after! apheleia
+  (if (alist-get 'tofu apheleia-formatters)
+      (setf (alist-get 'tofu apheleia-formatters) '("tofu" "fmt" "-"))
+    (push '(tofu .
+            ("tofu" "fmt" "-")) apheleia-formatters)))
+
 ;; Versioning and utilities
 ;;
 (use-package! autosync-magit)
