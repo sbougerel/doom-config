@@ -214,7 +214,6 @@
 
 (after! org-roam
   (setq
-   org-roam-database-connector 'sqlite-builtin
    org-roam-file-exclude-regexp "\\.git/.*\\|logseq/.*$"
    org-roam-capture-templates
    '(("d" "default" plain
