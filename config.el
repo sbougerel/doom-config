@@ -108,13 +108,21 @@
 ;; Editing
 ;;
 
+(use-package! treesit-auto
+  :config
+  (setq treesit-auto-langs '(tsx typescript json))
+  ;; This could take a long time at installation, so use manually.
+  ;;(treesit-auto-install-all)
+  (treesit-auto-add-to-auto-mode-alist 'all))
+
+(after! typescript-ts-mode
+  (add-hook! 'typescript-ts-base-mode-hook
+             #'rainbow-delimiters-mode))
+
 (after! typescript-ts-mode
   (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
   (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
   )
-
-(after! json-ts-mode
-  (add-hook! 'json-mode-hook #'doom--enable-+javascript-npm-mode-in-json-mode-h))
 
 (after! doom-editor
   ;; Doom thinks this is expensive, but I can't leave with having to scroll
