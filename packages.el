@@ -50,6 +50,11 @@
            :repo "sbougerel/logseq-org-roam"
            :files ("*.el")))
 
+(package! ellama
+  :recipe (:host github
+           :repo "s-kostyaev/ellama"
+           :files ("*.el")))
+
 (package! treesit-auto)
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
