@@ -116,10 +116,6 @@
   (treesit-auto-add-to-auto-mode-alist 'all))
 
 (after! typescript-ts-mode
-  (add-hook! 'typescript-ts-base-mode-hook
-             #'rainbow-delimiters-mode))
-
-(after! typescript-ts-mode
   (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
   (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
   )
