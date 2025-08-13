@@ -108,18 +108,6 @@
 ;; Editing
 ;;
 
-(use-package! treesit-auto
-  :config
-  (setq treesit-auto-langs '(tsx typescript json))
-  ;; This could take a long time at installation, so use manually.
-  ;;(treesit-auto-install-all)
-  (treesit-auto-add-to-auto-mode-alist 'all))
-
-(after! typescript-ts-mode
-  (add-hook! 'typescript-ts-mode-hook #'eglot-ensure)
-  (add-hook! 'tsx-ts-mode-hook #'eglot-ensure)
-  )
-
 (after! doom-editor
   ;; Doom thinks this is expensive, but I can't leave with having to scroll
   ;; horizontally due to me displaying multiple vertical windows. Wrapping lines
@@ -169,6 +157,11 @@
   (mapc (lambda (m)
           (add-to-list 'emojify-inhibit-major-modes m))
         '(rust-mode json-mode typescript-mode prog-mode)
+        ))
+
+(after! tree-sitter-hl
+  (setq +tree-sitter-hl-enabled-modes
+        nil
         ))
 
 ;; Navigation
