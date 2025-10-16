@@ -455,4 +455,8 @@
 
 (after! yasnippet
   (set-file-template! "\\.tsx$" :trigger "__tsx")
+
+  (defun user/pascal-case (s)
+    "Convert string S (like `my-component') to PascalCase (`MyComponent')."
+    (mapconcat #'capitalize (split-string s "[-_ ]" t) ""))
   )

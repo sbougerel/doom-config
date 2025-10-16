@@ -4,10 +4,11 @@
 # key: __tsx
 # condition: t
 # --
-export default function ${1:ComponentName}(props: ${2:Props}) {
+export default function `(user/pascal-case (file-name-base buffer-file-name))`() {
+  ${0}
+
   return (
-    <div className="${3:container}">
-      ${0}
+    <div className="">
     </div>
   );
 }
