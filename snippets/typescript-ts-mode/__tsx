@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name:
+# uuid:
+# key: __tsx
+# condition: t
+# --
+export default function ${1:ComponentName}(props: ${2:Props}) {
+  return (
+    <div className="${3:container}">
+      ${0}
+    </div>
+  );
+}
