@@ -135,6 +135,35 @@
          :desc "Hide blocks below"        "l" #'hs-hide-level
          )))
 
+(after! corfu
+  (setq
+   ;; If non-nil, prefer expanding snippets over cycling candidates with TAB.
+   +corfu-want-tab-prefer-expand-snippets t
+   ;; If non-nil, prefer navigating snippets over cycling candidates with TAB/S-TAB.
+   +corfu-want-tab-prefer-navigating-snippets t
+   ;; If non-nil, prefer navigating org tables over cycling candidates with TAB/S-TAB.
+   +corfu-want-tab-prefer-navigating-org-tables t
+   ;; Candidates selected are automatically inserted (tab-and-go style)
+   corfu-preview-current 'insert
+   ;; Prompt is automatically pre-selected
+   corfu-preselect 'prompt
+   )
+  ;; Update key map to be much less intrusive
+  (dolist (key '(
+                 "<remap> <move-beginning-of-line>"
+                 "<remap> <move-end-of-line>"
+                 "<remap> <beginning-of-buffer>"
+                 "<remap> <end-of-buffer>"
+                 "<remap> <scroll-down-command>"
+                 "<remap> <scroll-up-command>"
+                 "<remap> <next-line>"
+                 "<remap> <previous-line>"
+                 "<remap> <completion-at-point>"
+                 "<remap> <keyboard-escape-quit>"                
+                 ))
+    (keymap-unset corfu-map key))
+  )
+
 ;; Language supports in doom
 ;;
 
