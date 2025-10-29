@@ -138,11 +138,11 @@
 (after! corfu
   (setq
    ;; If non-nil, prefer expanding snippets over cycling candidates with TAB.
-   +corfu-want-tab-prefer-expand-snippets t
+   +corfu-want-tab-prefer-expand-snippets nil
    ;; If non-nil, prefer navigating snippets over cycling candidates with TAB/S-TAB.
-   +corfu-want-tab-prefer-navigating-snippets t
+   +corfu-want-tab-prefer-navigating-snippets nil
    ;; If non-nil, prefer navigating org tables over cycling candidates with TAB/S-TAB.
-   +corfu-want-tab-prefer-navigating-org-tables t
+   +corfu-want-tab-prefer-navigating-org-tables nil
    ;; Candidates selected are automatically inserted (tab-and-go style)
    corfu-preview-current 'insert
    ;; Prompt is automatically pre-selected
@@ -160,8 +160,26 @@
                  "<remap> <previous-line>"
                  "<remap> <completion-at-point>"
                  "<remap> <keyboard-escape-quit>"                
+                 "C-p"
+                 "C-n"
+                 "M->"
+                 "M-<"
+                 "M-v"
+                 "C-v"
                  ))
     (keymap-unset corfu-map key))
+  )
+
+(after! lsp-mode
+  (setq
+   ;; I don't want overwrite
+   lsp-completion-default-behaviour :insert
+   ;; This setting has caused me a lot of pain in Typescript, JS or TSX;
+   ;; especially when using a tab-and-go style of completion, because I often
+   ;; end up with double inserted. I will disable it first globally for
+   ;; simplicity, and conditionally enable it in other languages.
+   lsp-enable-snippet nil
+   )
   )
 
 ;; Language supports in doom
