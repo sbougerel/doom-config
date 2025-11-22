@@ -415,7 +415,10 @@
     )
   )
 
-(use-package! lsp-tailwindcss :after lsp-mode)
+(use-package! lsp-tailwindcss
+  :after lsp-mode
+  :init (setq lsp-tailwindcss-add-on-mode t)
+  :after lsp-mode)
 
 (after! spell-fu
   ;; Requires aspell for spell checking.
@@ -471,6 +474,8 @@
   )
 
 (use-package! emmet-mode
+  ;; I'm also testing ls-emmet (language server). It does seem emmet-mode is the
+  ;; more responsive however.
   :hook tsx-ts-mode-hook
   :config
   (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
