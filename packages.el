@@ -70,3 +70,7 @@
   :recipe (:host github
            :repo "smihica/emmet-mode"
            :files ("*.el")))
+
+(package! yasnippet-snippets
+  :recipe (:host github
+           :repo "AndreaCrotti/yasnippet-snippets"))

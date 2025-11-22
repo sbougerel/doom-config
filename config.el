@@ -478,3 +478,5 @@
   :hook tsx-ts-mode-hook
   :config
   (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
+
+(use-package! yasnippet-snippets)
