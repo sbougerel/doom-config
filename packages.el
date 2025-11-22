@@ -73,3 +73,11 @@
 (package! gptel :recipe (:nonrecursive t))
 
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+
+;; install claude-code.el, using :depth 1 to reduce download size:
+(package! claude-code
+  :recipe (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
+           :files ("*.el" (:exclude "images/*"))))
+
+(package! monet
+  :recipe (:type git :host github :repo "stevemolitor/monet"))

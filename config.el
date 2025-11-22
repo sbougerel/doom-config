@@ -444,7 +444,7 @@
   :config
   (add-hook 'logseq-org-roam-updated-hook #'org-roam-db-sync))
 
-
+;; Use gptel for general chatting, search, etc.
 (use-package! gptel
   :bind ("C-c /" . gptel-send)
   :config
@@ -454,8 +454,32 @@
                    :host "localhost:11434"
                    :stream t
                    :models '(llama3.1:8b)))
+  ;; `gptel-api-key' here makes use of authinit.
   (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
   )
+
+;; Claude MCP & Websocket API for integration
+(use-package! monet
+  :after claude
+  :config
+  (setq monet-prefix-key "C-c C-m")
+  )
+
+;; Use Claude code for actual coding
+;; install claude-code.el, using :depth 1 to reduce download size:
+(use-package! claude-code
+  :bind-keymap
+  ("C-c u" . claude-code-command-map) ;; or your preferred key Optionally define
+  ;; a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm
+  ;; modes after invoking claude-code-cycle-mode / C-c M.
+  :bind
+  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode))
+  :config
+  (setq claude-code-terminal-backend 'vterm)
+  ;; optional IDE integration with Monet
+  (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
+  (monet-mode 1)
+  (claude-code-mode))
 
 ;; Major modes settings
 ;;
