@@ -473,3 +473,8 @@
     "Convert string S (like `my-component') to PascalCase (`MyComponent')."
     (mapconcat #'capitalize (split-string s "[-_ ]" t) ""))
   )
+
+(use-package! emmet-mode
+  :hook tsx-ts-mode-hook
+  :config
+  (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
