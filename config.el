@@ -442,6 +442,18 @@
   (add-hook 'logseq-org-roam-updated-hook #'org-roam-db-sync))
 
 
+(use-package! gptel
+  :bind ("C-c /" . gptel-send)
+  :config
+  (setq
+   gptel-model 'llama3.1:8b
+   gptel-backend (gptel-make-ollama "Ollama"
+                   :host "localhost:11434"
+                   :stream t
+                   :models '(llama3.1:8b)))
+  (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
+  )
+
 ;; Major modes settings
 ;;
 

@@ -69,3 +69,5 @@
 (package! yasnippet-snippets
   :recipe (:host github
            :repo "AndreaCrotti/yasnippet-snippets"))
+
+(package! gptel :recipe (:nonrecursive t))
