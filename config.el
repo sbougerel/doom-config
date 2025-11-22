@@ -170,62 +170,6 @@
     (keymap-unset corfu-map key))
   )
 
-(after! lsp-mode
-  (setq
-   ;; I don't want overwrite
-   lsp-completion-default-behaviour :insert
-   ;; This setting has caused me a lot of pain in Typescript, JS or TSX;
-   ;; especially when using a tab-and-go style of completion, because I often
-   ;; end up with double inserted. I will disable it first globally for
-   ;; simplicity, and conditionally enable it in other languages.
-   lsp-enable-snippet nil
-   )
-
-  ;; enable LSP-booster.
-  ;; Requires:
-  ;; $ rustup
-  ;; $ cargo install emacs-lsp-booster
-  ;; 
-  ;; Make sure rustup utils are on the path, so `emacs-lsp-booster' can be
-  ;; found.
-  (when (modulep! :tools lsp +booster -eglot)
-    ;; Source: https://github.com/blahgeek/emacs-lsp-booster
-    (defun lsp-booster--advice-json-parse (old-fn &rest args)
-      "Try to parse bytecode instead of json."
-      (or
-       (when (equal (following-char) ?#)
-         (let ((bytecode (read (current-buffer))))
-           (when (byte-code-function-p bytecode)
-             (funcall bytecode))))
-       (apply old-fn args)))
-    (advice-add (if (progn (require 'json)
-                           (fboundp 'json-parse-buffer))
-                    'json-parse-buffer
-                  'json-read)
-                :around
-                #'lsp-booster--advice-json-parse)
-
-    (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-      "Prepend emacs-lsp-booster command to lsp CMD."
-      (let ((orig-result (funcall old-fn cmd test?)))
-        (if (and (not test?)                             ;; for check lsp-server-present?
-                 (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-                 lsp-use-plists
-                 (not (functionp 'json-rpc-connection))  ;; native json-rpc
-                 (executable-find "emacs-lsp-booster"))
-            (progn
-              (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
-                (setcar orig-result command-from-exec-path))
-              (message "Using emacs-lsp-booster for %s!" orig-result)
-              (cons "emacs-lsp-booster" orig-result))
-          orig-result)))
-    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-    )
-  )
-
-;; Language supports in doom
-;;
-
 ;; UI, Look & Feel
 ;;
 
@@ -418,6 +362,61 @@
 ;; Assistants
 ;;
 
+(after! lsp-mode
+  (setq
+   ;; I don't want overwrite
+   lsp-completion-default-behaviour :insert
+   ;; This setting has caused me a lot of pain in Typescript, JS or TSX;
+   ;; especially when using a tab-and-go style of completion, because I often
+   ;; end up with double inserted. I will disable it first globally for
+   ;; simplicity, and conditionally enable it in other languages.
+   lsp-enable-snippet nil
+   )
+
+  ;; enable LSP-booster.
+  ;; Requires:
+  ;; $ rustup
+  ;; $ cargo install emacs-lsp-booster
+  ;; 
+  ;; Make sure rustup utils are on the path, so `emacs-lsp-booster' can be
+  ;; found.
+  (when (modulep! :tools lsp +booster -eglot)
+    ;; Source: https://github.com/blahgeek/emacs-lsp-booster
+    (defun lsp-booster--advice-json-parse (old-fn &rest args)
+      "Try to parse bytecode instead of json."
+      (or
+       (when (equal (following-char) ?#)
+         (let ((bytecode (read (current-buffer))))
+           (when (byte-code-function-p bytecode)
+             (funcall bytecode))))
+       (apply old-fn args)))
+    (advice-add (if (progn (require 'json)
+                           (fboundp 'json-parse-buffer))
+                    'json-parse-buffer
+                  'json-read)
+                :around
+                #'lsp-booster--advice-json-parse)
+
+    (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+      "Prepend emacs-lsp-booster command to lsp CMD."
+      (let ((orig-result (funcall old-fn cmd test?)))
+        (if (and (not test?)                             ;; for check lsp-server-present?
+                 (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+                 lsp-use-plists
+                 (not (functionp 'json-rpc-connection))  ;; native json-rpc
+                 (executable-find "emacs-lsp-booster"))
+            (progn
+              (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+                (setcar orig-result command-from-exec-path))
+              (message "Using emacs-lsp-booster for %s!" orig-result)
+              (cons "emacs-lsp-booster" orig-result))
+          orig-result)))
+    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+    )
+  )
+
+(use-package! lsp-tailwindcss :after lsp-mode)
+
 (after! spell-fu
   ;; Requires aspell for spell checking.
   (setq spell-fu-idle-delay 0.5))  ; default is 0.25
@@ -435,6 +434,7 @@
 
 ;; Versioning and utilities
 ;;
+
 (use-package! autosync-magit)
 
 (use-package! logseq-org-roam
