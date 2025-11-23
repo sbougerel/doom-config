@@ -66,10 +66,6 @@
            :repo "smihica/emmet-mode"
            :files ("*.el")))
 
-(package! yasnippet-snippets
-  :recipe (:host github
-           :repo "AndreaCrotti/yasnippet-snippets"))
-
 (package! gptel :recipe (:nonrecursive t))
 
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))

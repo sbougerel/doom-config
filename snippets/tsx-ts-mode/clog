@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: clog
-# key: clog
-# --
-console.log('${0}', ${0});

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: expdefun
-# key: expdefun
-# --
-export default function

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: param-comment
+# key: *@p
+#condition: (user/treesit-in-comment-p)
+# --
+* @param {${type}} ${comment}.

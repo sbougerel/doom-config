@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Canterly SelectInput
+# key: cansi
+# condition: t
+# --
+<SelectInput
+  label={${1:label}}
+  name={${2:name}}
+  control={control}
+  placeholder={${3:placeholder}}
+  disabled={${4:false}}
+  required={${5:false}}
+  isClearable={${6:false}}
+/>

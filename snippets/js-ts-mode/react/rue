@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: React useEffect
+# key: rue
+# condition: t
+# --
+useEffect(() => {
+  $0
+}, [$1]);

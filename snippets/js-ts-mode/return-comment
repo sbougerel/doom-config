@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: return-comment
+# key: *@r
+#condition: (user/treesit-in-comment-p)
+# --
+* @return {${type}}

@@ -491,10 +491,14 @@
 
 (after! yasnippet
   (set-file-template! "\\.tsx$" :trigger "__tsx")
-
+  ;; helper functions used in snippets
   (defun user/pascal-case (s)
     "Convert string S (like `my-component') to PascalCase (`MyComponent')."
     (mapconcat #'capitalize (split-string s "[-_ ]" t) ""))
+  (defun user/treesit-in-comment-p ()
+    "Return non-nil if in a comment, only works on treesitter modes"
+    (member (treesit-node-type (treesit-node-at (point))) '("comment" "line_comment" "block_comment" "doc_comment"))
+    )
   )
 
 (use-package! emmet-mode
@@ -503,5 +507,3 @@
   :hook tsx-ts-mode-hook
   :config
   (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
-
-(use-package! yasnippet-snippets)

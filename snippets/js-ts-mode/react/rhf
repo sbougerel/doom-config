@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: React Hook Form
+# key: rhf
+# condition: t
+# --
+const {
+  control,
+  reset,
+  formState: { isSubmitting, isDirty },
+  handleSubmit,
+  setValue,
+} = useForm({
+  mode: 'onChange',
+  resolver: zodResolver($1),
+  defaultValues: $2,
+});

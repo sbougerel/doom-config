@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: type-multiline-comment
+# key: *ty
+#condition: (user/treesit-in-comment-p)
+# --
+* @type {${type}}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: type-inline-comment
+# key: @ty
+#condition: (not (user/treesit-in-comment-p))
+# --
+/** @type {${type}} */
