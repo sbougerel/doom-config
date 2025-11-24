@@ -491,6 +491,8 @@
 
 (after! yasnippet
   (set-file-template! "\\.tsx$" :trigger "__tsx")
+  ;; TODO: move this to .yas-setup.el?
+  ;;http://joaotavora.github.io/yasnippet/snippet-organization.html
   ;; helper functions used in snippets
   (defun user/pascal-case (s)
     "Convert string S (like `my-component') to PascalCase (`MyComponent')."
