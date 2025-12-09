@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: Canterly server action
+# uuid: 
+# key: cantsa
+# condition: t
+# --
+export const ${1:serverActionName} = authServerAction(
+  '$1',
+  ${2:SERVER_ACTION_PARAMS},
+  (params) => params.account,
+  async (auth, params, log) => {
+    const { account } = params;
+    const now = new Date();
+    const isoNow = now.toISOString();
+
+    return ok();
+  },
+);
