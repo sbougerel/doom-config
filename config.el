@@ -433,10 +433,13 @@
   (if (alist-get 'tofu apheleia-formatters)
       (setf (alist-get 'tofu apheleia-formatters) '("tofu" "fmt" "-"))
     (push '(tofu .
-            ("tofu" "fmt" "-")) apheleia-formatters)))
+            ("tofu" "fmt" "-")) apheleia-Versioning)))
 
-;; Versioning and utilities
+;; formatters and utilities
 ;;
+
+(after! vterm
+  (remove-hook 'vterm-mode-hook #'hide-mode-line-mode))
 
 (use-package! autosync-magit)
 
