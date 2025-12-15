@@ -178,6 +178,15 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-nord)
 
+(after! doom-modeline
+  ;; Other available options:
+  ;; - 'auto (default) - Automatically adjusts based on window width
+  ;; - 'truncate-with-project - Shows abbreviated project + path
+  ;; - 'truncate-except-project - Abbreviates everything except project name
+  ;; - 'truncate-upto-root - Shows path from filesystem root
+  ;; - 'relative-to-project - Shows path relative to project
+  (setq doom-modeline-buffer-file-name-style 'truncate-with-project))
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -433,9 +442,9 @@
   (if (alist-get 'tofu apheleia-formatters)
       (setf (alist-get 'tofu apheleia-formatters) '("tofu" "fmt" "-"))
     (push '(tofu .
-            ("tofu" "fmt" "-")) apheleia-Versioning)))
+            ("tofu" "fmt" "-")) apheleia-formatters)))
 
-;; formatters and utilities
+;; Versioning and utilities
 ;;
 
 (after! vterm
