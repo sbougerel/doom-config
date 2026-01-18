@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: Blog entry
+# uuid: 
+# key: @blog
+# condition: t
+# --
+* TODO ${1:Title} :@blog:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ${1:$(user/kebab-case yas-text)}
+:END:
+$0

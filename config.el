@@ -474,7 +474,7 @@
 (use-package! monet
   :after claude
   :config
-  (setq monet-prefix-key "C-c C-m")
+  (setq monet-prefix-key "C-c C-u")
   )
 
 ;; Use Claude code for actual coding
@@ -509,6 +509,9 @@
   (defun user/pascal-case (s)
     "Convert string S (like `my-component') to PascalCase (`MyComponent')."
     (mapconcat #'capitalize (split-string s "[-_ ]" t) ""))
+  (defun user/kebab-case (s)
+    "Convert string S (like `my-component') to kebab-case (`my-component')."
+    (mapconcat #'downcase (split-string s "[-_ ]" t) "-"))
   (defun user/treesit-in-comment-p ()
     "Return non-nil if in a comment, only works on treesitter modes"
     (member (treesit-node-type (treesit-node-at (point))) '("comment" "line_comment" "block_comment" "doc_comment"))
