@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: export async function
+# uuid: 66393eda-92a1-4f8b-8d25-4ee1d2fc18cd
+# key: eaf
+# condition: t
+# contributor: Sylvain Bougerel <sylvain.bougerel@gmail.com>
+# --
+export async function ${1:functionName}(${2:params}) {
+  $0
+}
