@@ -299,6 +299,10 @@
                  "R" #'org-roam-ref-remove
                  )))
 
+(use-package! ox-hugo
+  :when (modulep! +hugo)
+  :after ox)
+
 (after! (:and org-roam popup)
   ;; Display the popup buffer below the current window, by slpitting the window
   ;; NOTE Should this be automated for all ~@pages~ buffers?

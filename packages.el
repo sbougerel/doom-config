@@ -77,3 +77,8 @@
 
 (package! monet
   :recipe (:type git :host github :repo "stevemolitor/monet"))
+
+;; ox-hugo restored
+(when (modulep! +hugo)
+  (package! ox-hugo
+    :recipe (:host github :repo "kaushalmodi/ox-hugo" :nonrecursive t)))
