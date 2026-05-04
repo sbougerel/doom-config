@@ -531,3 +531,9 @@
   :hook tsx-ts-mode-hook
   :config
   (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
+
+(after! tramp
+  ;; TRAMP overrides PATH from tramp-remote-path rather than inheriting it from
+  ;; the login shell. Add ~/.local/bin so user-installed tools (e.g. Claude Code)
+  ;; are accessible in canterly-devbox sessions.
+  (add-to-list 'tramp-remote-path "~/.local/bin"))
