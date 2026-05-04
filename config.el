@@ -375,8 +375,15 @@
        :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
        :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text))
 
-;; Assistants
+;; Tools & Assistants
 ;;
+
+
+(after! tramp
+  ;; TRAMP overrides PATH from tramp-remote-path rather than inheriting it from
+  ;; the login shell.
+  (add-to-list 'tramp-remote-path "~/.local/bin")
+  )
 
 (after! lsp-mode
   (setq
@@ -531,9 +538,3 @@
   :hook tsx-ts-mode-hook
   :config
   (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode ))
-
-(after! tramp
-  ;; TRAMP overrides PATH from tramp-remote-path rather than inheriting it from
-  ;; the login shell. Add ~/.local/bin so user-installed tools (e.g. Claude Code)
-  ;; are accessible in canterly-devbox sessions.
-  (add-to-list 'tramp-remote-path "~/.local/bin"))
