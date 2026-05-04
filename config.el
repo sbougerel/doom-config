@@ -300,7 +300,7 @@
                  )))
 
 (use-package! ox-hugo
-  :when (modulep! +hugo)
+  :when (modulep! :lang org +hugo)
   :after ox)
 
 (after! (:and org-roam popup)
