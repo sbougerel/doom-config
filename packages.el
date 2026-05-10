@@ -40,9 +40,9 @@
 ;; Use `:pin' to specify a particular commit to install.
 ;;(package! builtin-package :pin "1a2b3c4d5e")
 
-(package! autosync-magit
+(package! autosync-git
   :recipe (:host github
-           :repo "sbougerel/autosync-magit"
+           :repo "sbougerel/autosync-git"
            :files ("*.el")))
 
 (package! logseq-org-roam

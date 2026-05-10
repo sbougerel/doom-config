@@ -464,7 +464,7 @@
 (after! vterm
   (remove-hook 'vterm-mode-hook #'hide-mode-line-mode))
 
-(use-package! autosync-magit)
+(use-package! autosync-git)
 
 (use-package! logseq-org-roam
   :config
