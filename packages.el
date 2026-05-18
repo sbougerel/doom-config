@@ -82,3 +82,7 @@
 (when (modulep! :lang org +hugo)
   (package! ox-hugo
     :recipe (:host github :repo "kaushalmodi/ox-hugo" :nonrecursive t)))
+
+;; ghostel - terminal based on libghostty
+(package! ghostel
+  :recipe (:type git :host github :repo "dakra/ghostel"))

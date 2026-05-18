@@ -462,7 +462,26 @@
 ;;
 
 (after! vterm
-  (remove-hook 'vterm-mode-hook #'hide-mode-line-mode))
+  (remove-hook 'vterm-mode-hook #'mode-line-invisible-mode))
+
+(use-package! ghostel
+  :when (bound-and-true-p module-file-suffix)  ; requires dynamic-modules support
+  :commands ghostel-mode
+  :preface
+  ;; HACK: Because vterm clusmily forces vterm-module.so's compilation on us
+  ;;   when the package is loaded, this is necessary to prevent it when
+  ;;   byte-compiling this file (`use-package' blocks eagerly loads packages
+  ;;   when compiled).
+  (when noninteractive
+    (advice-add #'ghostel-module-compile :override #'ignore)
+    (provide 'ghostel-module))
+
+  :config
+  (setq ghostel-module-auto-install 'download)
+  (set-popup-rule! "^\\*ghostel" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
+
+  (map! :map ghostel-mode-map "C-q" #'ghostel-send-next-key)
+  )
 
 (use-package! autosync-git)
 
@@ -501,7 +520,7 @@
   :bind
   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode))
   :config
-  (setq claude-code-terminal-backend 'vterm)
+  (setq claude-code-terminal-backend 'ghostel)
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
   (monet-mode 1)
