@@ -86,3 +86,8 @@
 ;; ghostel - terminal based on libghostty
 (package! ghostel
   :recipe (:type git :host github :repo "dakra/ghostel"))
+
+;; Dap-mode
+(package! dap-mode
+  :recipe (:type git :host github :repo "emacs-lsp/dap-mode" :branch "master" :depth 1
+           :files ("*.el")))
