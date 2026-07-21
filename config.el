@@ -378,11 +378,30 @@
 ;; Tools & Assistants
 ;;
 
-
 (after! tramp
   ;; TRAMP overrides PATH from tramp-remote-path rather than inheriting it from
   ;; the login shell.
   (add-to-list 'tramp-remote-path "~/.local/bin")
+  ;; Tramp is great, but slows down Emacs a lot even on normal operations
+  ;; Some configs to avoid the slowdowns.
+  ;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
+  (setq  tramp-verbose 2 remote-file-name-inhibit-locks t
+         tramp-use-scp-direct-remote-copying t
+         remote-file-name-inhibit-auto-save-visited t)
+  (after! recentf
+    (setq recentf-keep '(file-remote-p recentf-keep-default-predicate))
+    )
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scp")
+   'remote-direct-async-process)
+  ;; `file-truename' slowdowns.
+  ;; Don't expire cache unless files change outside Emacs
+  (setq remote-file-name-inhibit-cache nil)
+  ;; https://github.com/magit/magit/issues/5220
+  (setq magit-tramp-pipe-stty-settings 'pty)
   )
 
 (after! lsp-mode
@@ -483,7 +502,8 @@
   (map! :map ghostel-mode-map "C-q" #'ghostel-send-next-key)
   )
 
-(use-package! autosync-git)
+(use-package! autosync-git
+  :config (add-hook 'autosync-git-after-pull-hook #'logseq-org-roam))
 
 (use-package! logseq-org-roam
   :config
