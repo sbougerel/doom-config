@@ -514,11 +514,11 @@
   :bind ("C-c /" . gptel-send)
   :config
   (setq
-   gptel-model 'llama3.1:8b
+   gptel-model 'qwen3.6:latest
    gptel-backend (gptel-make-ollama "Ollama"
                    :host "localhost:11434"
                    :stream t
-                   :models '(llama3.1:8b)))
+                   :models '(qwen3.6:latest)))
   ;; `gptel-api-key' here makes use of authinit.
   (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
   )
