@@ -69,11 +69,11 @@
           doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
           doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 16)
           doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'bold))
-  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
-        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 32)
-        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 26)
+  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 16)
+        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 18)
         ;; 'fixed-pitch-serif' face is generally for emphasis only
-        doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :weight 'bold)))
+        doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 16 :weight 'bold)))
 
 (after! org-faces
   (dolist
