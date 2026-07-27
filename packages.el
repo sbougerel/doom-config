@@ -91,3 +91,6 @@
 (package! dap-mode
   :recipe (:type git :host github :repo "emacs-lsp/dap-mode" :branch "master" :depth 1
            :files ("*.el")))
+
+(package! ob-mermaid
+  :recipe (:type git :host github :repo "arnm/ob-mermaid" :branch "master" :depth 1 :files ("*.el")))

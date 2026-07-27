@@ -248,6 +248,12 @@
         org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "DOING(n!)" "STRT(s!)" "HOLD(h!)" "|" "DONE(d!)" "KILL(k!)")
                             (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)"))))
 
+(use-package! ob-mermaid
+  :after org
+  :init
+  (setq ob-mermaid-default-config-file "~/.mermaid-config-emacs.json")
+  )
+
 (after! org-agenda
   ;; TODO the list below is extremely long and slow, need to build it from an org-roam-db-query instead
   (setq org-agenda-files
