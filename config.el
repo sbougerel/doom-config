@@ -459,8 +459,7 @@
 
 (use-package! lsp-tailwindcss
   :after lsp-mode
-  :init (setq lsp-tailwindcss-add-on-mode t)
-  :after lsp-mode)
+  :init (setq lsp-tailwindcss-add-on-mode t))
 
 (after! spell-fu
   ;; Requires aspell for spell checking.
