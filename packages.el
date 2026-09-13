@@ -66,26 +66,12 @@
            :repo "smihica/emmet-mode"
            :files ("*.el")))
 
-(package! gptel :recipe (:nonrecursive t))
-
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
-
-;; install claude-code.el, using :depth 1 to reduce download size:
-(package! claude-code
-  :recipe (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
-           :files ("*.el" (:exclude "images/*"))))
-
-(package! monet
-  :recipe (:type git :host github :repo "stevemolitor/monet"))
 
 ;; ox-hugo restored
 (when (modulep! :lang org +hugo)
   (package! ox-hugo
     :recipe (:host github :repo "kaushalmodi/ox-hugo" :nonrecursive t)))
-
-;; ghostel - terminal based on libghostty
-(package! ghostel
-  :recipe (:type git :host github :repo "dakra/ghostel"))
 
 ;; Dap-mode
 (package! dap-mode

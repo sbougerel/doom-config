@@ -64,16 +64,10 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 (setq doom-font-increment 1)
-(if (featurep :system 'macos)
-    (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
-          doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
-          doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 16)
-          doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'bold))
-  (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 16)
-        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
-        doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 18)
-        ;; 'fixed-pitch-serif' face is generally for emphasis only
-        doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 16 :weight 'bold)))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'light)
+      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20)
+      doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 16)
+      doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'bold))
 
 (after! org-faces
   (dolist
@@ -108,16 +102,17 @@
 ;; Editing
 ;;
 
-(after! doom-editor
-  ;; Doom thinks this is expensive, but I can't leave with having to scroll
-  ;; horizontally due to me displaying multiple vertical windows. Wrapping lines
-  ;; lifts this inconvenience.
-  (setq-default truncate-lines nil)
-  ;; Given the above, I got used to wrapping at any point in the line.
-  (setq-default word-wrap nil)
-  ;; Given that I regularly dispay 3 to 4 vertical buffers, I find 60 is good
-  ;; limit.
-  (setq-default truncate-partial-width-windows 60))
+;; Doom thinks this is expensive, but I can't leave with having to scroll
+;; horizontally due to me displaying multiple vertical windows. Wrapping lines
+;; lifts this inconvenience.
+(setq-default truncate-lines nil)
+;; Disable visual line mode by default
+(setq-default global-visual-line-mode -1)
+;; Given the above, I got used to wrapping at any point in the line.
+(setq-default word-wrap nil)
+;; Given that I regularly dispay 3 to 4 vertical buffers, I find 60 is good
+;; limit.
+(setq-default truncate-partial-width-windows 40)
 
 (after! (:and elisp-mode doom-editor)
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq sentence-end-double-space t))))
@@ -275,7 +270,7 @@
       "%?"
       ;; Accomodates for the fact that Logseq uses the "pages" directory
       :target (file+head "pages/${slug}.org"
-                         "#+title: ${title}\n#+filetags: :blog:\n* ${title} :@blog:\n:PROPERTIES:\n:EXPORT_FILE_NAME: ${slug}\n:END:\n")
+                         "#+title: ${title}\n#+filetags: :@blog:\n* ${title} :tag:\n:PROPERTIES:\n:EXPORT_FILE_NAME: ${slug}\n:END:\n")
       :unnarrowed t))
    org-roam-dailies-capture-templates
    '(("d" "default" entry
@@ -416,51 +411,10 @@
    lsp-completion-default-behaviour :insert
    ;; This setting has caused me a lot of pain in Typescript, JS or TSX;
    ;; especially when using a tab-and-go style of completion, because I often
-   ;; end up with double inserted. I will disable it first globally for
+   ;; end up with double insert. I will disable it first globally for
    ;; simplicity, and conditionally enable it in other languages.
    lsp-enable-snippet nil
    )
-
-  ;; enable LSP-booster.
-  ;; Requires:
-  ;; $ rustup
-  ;; $ cargo install emacs-lsp-booster
-  ;; 
-  ;; Make sure rustup utils are on the path, so `emacs-lsp-booster' can be
-  ;; found.
-  (when (modulep! :tools lsp +booster -eglot)
-    ;; Source: https://github.com/blahgeek/emacs-lsp-booster
-    (defun lsp-booster--advice-json-parse (old-fn &rest args)
-      "Try to parse bytecode instead of json."
-      (or
-       (when (equal (following-char) ?#)
-         (let ((bytecode (read (current-buffer))))
-           (when (byte-code-function-p bytecode)
-             (funcall bytecode))))
-       (apply old-fn args)))
-    (advice-add (if (progn (require 'json)
-                           (fboundp 'json-parse-buffer))
-                    'json-parse-buffer
-                  'json-read)
-                :around
-                #'lsp-booster--advice-json-parse)
-
-    (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-      "Prepend emacs-lsp-booster command to lsp CMD."
-      (let ((orig-result (funcall old-fn cmd test?)))
-        (if (and (not test?)                             ;; for check lsp-server-present?
-                 (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-                 lsp-use-plists
-                 (not (functionp 'json-rpc-connection))  ;; native json-rpc
-                 (executable-find "emacs-lsp-booster"))
-            (progn
-              (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
-                (setcar orig-result command-from-exec-path))
-              (message "Using emacs-lsp-booster for %s!" orig-result)
-              (cons "emacs-lsp-booster" orig-result))
-          orig-result)))
-    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-    )
   )
 
 (use-package! lsp-tailwindcss
@@ -513,43 +467,6 @@
 (use-package! logseq-org-roam
   :config
   (add-hook 'logseq-org-roam-updated-hook #'org-roam-db-sync))
-
-;; Use gptel for general chatting, search, etc.
-(use-package! gptel
-  :bind ("C-c /" . gptel-send)
-  :config
-  (setq
-   gptel-model 'qwen3.6:latest
-   gptel-backend (gptel-make-ollama "Ollama"
-                   :host "localhost:11434"
-                   :stream t
-                   :models '(qwen3.6:latest)))
-  ;; `gptel-api-key' here makes use of authinit.
-  (gptel-make-anthropic "Claude" :stream t :key gptel-api-key)
-  )
-
-;; Claude MCP & Websocket API for integration
-(use-package! monet
-  :after claude
-  :config
-  (setq monet-prefix-key "C-c C-u")
-  )
-
-;; Use Claude code for actual coding
-;; install claude-code.el, using :depth 1 to reduce download size:
-(use-package! claude-code
-  :bind-keymap
-  ("C-c u" . claude-code-command-map) ;; or your preferred key Optionally define
-  ;; a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm
-  ;; modes after invoking claude-code-cycle-mode / C-c M.
-  :bind
-  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode))
-  :config
-  (setq claude-code-terminal-backend 'ghostel)
-  ;; optional IDE integration with Monet
-  (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
-  (monet-mode 1)
-  (claude-code-mode))
 
 ;; Major modes settings
 ;;
